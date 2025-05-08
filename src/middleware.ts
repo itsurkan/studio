@@ -23,10 +23,10 @@ export const config = {
 
     // Set a cookie to remember the previous locale for
     // all requests that have a locale prefix
-    '/(en|es|uk)/:path*', // Updated to include 'uk'
+    '/(en|es|ua)/:path*', // Updated to include 'ua'
 
     // Enable redirects that add missing locales
-    // (e.g. `/pathnames` -> `/uk/pathnames`)
+    // (e.g. `/pathnames` -> `/ua/pathnames`)
     '/((?!_next|_vercel|.*\\..*).*)'
   ]
 };

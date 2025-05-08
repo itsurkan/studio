@@ -1,8 +1,8 @@
 
 import {getRequestConfig} from 'next-intl/server';
  
-export const locales = ['en', 'es', 'uk'];
-export const defaultLocale = 'uk';
+export const locales = ['en', 'es', 'ua'];
+export const defaultLocale = 'ua';
 
 export default getRequestConfig(async ({locale}) => {
   // Validate that the incoming `locale` parameter is a subset of the defined locales.
