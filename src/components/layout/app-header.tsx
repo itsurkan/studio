@@ -1,9 +1,10 @@
+
 "use client";
 
 import { BrainCircuit, Menu } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { AppSidebarNav } from "./app-sidebar-nav";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -30,12 +31,16 @@ export function AppHeader() {
                   <span className="sr-only">Toggle Menu</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="left" className="pr-0 bg-sidebar">
-                <Link href="/dashboard" className="flex items-center space-x-2 p-4 border-b">
-                  <BrainCircuit className="h-6 w-6 text-primary" />
-                  <span className="inline-block font-bold">Gnosis.AI</span>
-                </Link>
-                <div className="p-4">
+              <SheetContent side="left" className="flex flex-col p-0 bg-sidebar">
+                <SheetHeader className="p-4 border-b border-sidebar-border">
+                  <SheetTitle>
+                    <Link href="/dashboard" className="flex items-center space-x-2 text-sidebar-foreground hover:text-sidebar-primary">
+                      <BrainCircuit className="h-6 w-6 text-sidebar-primary" />
+                      <span className="text-lg font-semibold">Gnosis.AI</span>
+                    </Link>
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="flex-grow p-4 overflow-y-auto">
                  <AppSidebarNav />
                 </div>
               </SheetContent>
@@ -48,3 +53,4 @@ export function AppHeader() {
     </header>
   );
 }
+
