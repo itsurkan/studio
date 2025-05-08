@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-// Removed Geist font imports as they were related to a previous hydration issue and are not present in the final user code state for this step.
 import "./globals.css";
-// import { AppProviders } from "@/contexts/app-providers"; // AppProviders will be moved
+import { AppProviders } from "@/contexts/app-providers"; // Import AppProviders
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
@@ -16,10 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {/* Body classes related to fonts were removed in a previous step to address hydration. */}
       <body suppressHydrationWarning>
-        {children}
-        <Toaster />
+        <AppProviders> {/* AppProviders now wraps all children */}
+          {children}
+          <Toaster />
+        </AppProviders>
       </body>
     </html>
   );

@@ -1,8 +1,9 @@
+
 "use client";
 
 import type { ReactNode } from 'react';
 import { FileProvider } from './file-provider';
-// Import other providers here if needed
+import { AuthProvider } from './auth-provider'; // Import AuthProvider
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -10,9 +11,10 @@ interface AppProvidersProps {
 
 export function AppProviders({ children }: AppProvidersProps) {
   return (
-    <FileProvider>
-      {/* Wrap with other providers if you add them */}
-      {children}
-    </FileProvider>
+    <AuthProvider> {/* AuthProvider wraps FileProvider */}
+      <FileProvider>
+        {children}
+      </FileProvider>
+    </AuthProvider>
   );
 }
