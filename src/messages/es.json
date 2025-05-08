@@ -1,0 +1,145 @@
+
+{
+  "AppHeader": {
+    "title": "Gnosis.AI",
+    "toggleMenu": "Alternar Menú"
+  },
+  "AppSidebarNav": {
+    "dashboard": "Panel",
+    "semanticSearch": "Búsqueda Semántica",
+    "rag": "Pregunta a tus Datos (RAG)"
+  },
+  "DashboardPage": {
+    "welcome": "Bienvenido a Gnosis.AI",
+    "description": "Sube, busca y analiza tus documentos con facilidad.",
+    "quickTipsTitle": "Consejos Rápidos",
+    "tipUpload": "<strong>Subir:</strong> Arrastra y suelta o haz clic para subir texto, PDFs, hojas de cálculo e imágenes.",
+    "tipSearch": "<strong>Buscar:</strong> Usa la página de Búsqueda Semántica para encontrar información en tus documentos usando lenguaje natural.",
+    "tipAnalyze": "<strong>Analizar:</strong> Haz preguntas o solicita resúmenes en la página RAG para obtener información impulsada por IA.",
+    "integrationsTitle": "Integraciones",
+    "integrationsDescription": "Conecta con Google Drive y Dropbox",
+    "integrationsComingSoon": "Importa archivos directamente desde tu almacenamiento en la nube. (Próximamente vía Zapier)"
+  },
+  "UserNav": {
+    "login": "Iniciar Sesión",
+    "dashboard": "Panel",
+    "logout": "Cerrar Sesión",
+    "userAvatarAlt": "Avatar de Usuario",
+    "user": "Usuario",
+    "settings": "Configuración"
+  },
+  "LoginPage": {
+    "title": "Gnosis.AI",
+    "description": "Desbloquea información de tus datos. Inicia sesión para comenzar.",
+    "intro": "Sube tus documentos, haz preguntas y obtén resúmenes inteligentes. Simplifica tu flujo de trabajo y descubre conocimiento oculto.",
+    "signInWithGoogle": "Iniciar Sesión con Google",
+    "loading": "Cargando...",
+    "footer": "&copy; {year} Gnosis.AI. Seguro e Inteligente."
+  },
+  "FileUploadForm": {
+    "title": "Sube tus Archivos",
+    "description": "Arrastra y suelta archivos o haz clic para seleccionar. Máx 5MB por archivo, {maxFiles} archivos en total.",
+    "dropzoneActive": "Suelta los archivos aquí ...",
+    "dropzoneDefault": "Arrastra y suelta algunos archivos aquí, o haz clic para seleccionar archivos",
+    "selectedFiles": "Archivos Seleccionados:",
+    "uploadLimitExceeded": "Límite de Subida Excedido",
+    "uploadLimitExceededDescription": "Solo puedes seleccionar hasta {maxFiles} archivos a la vez.",
+    "fileError": "Error de Archivo: {fileName}",
+    "noFilesSelected": "No hay archivos seleccionados",
+    "noFilesSelectedDescription": "Por favor, selecciona archivos para subir.",
+    "noNewFilesToUpload": "No hay archivos nuevos para subir",
+    "noNewFilesToUploadDescription": "Todos los archivos seleccionados ya están procesados o se están subiendo.",
+    "uploadFailed": "Fallo de Subida: {fileName}",
+    "uploadSuccessful": "Subida Exitosa",
+    "uploadSuccessfulDescription": "{count} archivo(s) procesado(s).",
+    "removeFile": "Eliminar {fileName}",
+    "statusUploading": "subiendo",
+    "statusError": "error",
+    "statusSuccess": "éxito",
+    "clearAll": "Limpiar Todo",
+    "processSelectedFiles": "Procesar Archivos Seleccionados",
+    "processing": "Procesando..."
+  },
+  "FileList": {
+    "myFiles": "Mis Archivos",
+    "manageDocuments": "Gestiona tus documentos subidos.",
+    "noFilesUploaded": "Aún no hay archivos subidos.",
+    "uploadToStart": "Sube algunos archivos para empezar.",
+    "downloadFile": "Descargar {fileName}",
+    "removeFile": "Eliminar {fileName}"
+  },
+  "RagPage": {
+    "title": "Pregunta a tus Datos (RAG)",
+    "description": "Obtén respuestas y resúmenes de tu documento seleccionado.",
+    "selectFileTitle": "Selecciona un Archivo",
+    "selectFileDescription": "Elige un documento para consultar.",
+    "askQuestionTitle": "Haz una Pregunta o Solicita un Resumen",
+    "askQuestionDescription": "Asegúrate de haber seleccionado un archivo primero. Ejemplo: \"Resume este documento.\" o \"¿Cuáles son las cifras financieras clave?\"",
+    "yourQueryLabel": "Tu Consulta",
+    "queryPlaceholder": "Escribe tu pregunta o solicitud de resumen aquí...",
+    "outputFormatLabel": "Formato de Salida",
+    "outputFormatPlaceholder": "Selecciona formato",
+    "formatParagraphs": "Párrafos",
+    "formatBullets": "Viñetas",
+    "getAnswer": "Obtener Respuesta",
+    "errorTitle": "Error",
+    "selectAFileAlertTitle": "Selecciona un Archivo",
+    "selectAFileAlertDescription": "Por favor, selecciona un archivo de la lista a la izquierda para comenzar a hacer preguntas.",
+    "aiResponseTitle": "Respuesta Generada por IA",
+    "aiResponseForFile": "Para el archivo: {fileName}",
+    "copyResult": "Copiar resultado",
+    "downloadResult": "Descargar resultado",
+    "toastNoFileSelectedTitle": "Ningún Archivo Seleccionado",
+    "toastNoFileSelectedDescription": "Por favor, selecciona un archivo para consultar.",
+    "toastEmptyQueryTitle": "Consulta Vacía",
+    "toastEmptyQueryDescription": "Por favor, ingresa una pregunta o solicitud.",
+    "toastQuerySuccessfulTitle": "Consulta Exitosa",
+    "toastQuerySuccessfulDescription": "La IA ha generado una respuesta.",
+    "toastQueryErrorTitle": "Error en la Consulta",
+    "toastCopiedTitle": "¡Copiado!",
+    "toastCopiedDescription": "Resultado copiado al portapapeles.",
+    "toastCopyFailedTitle": "Fallo al Copiar",
+    "toastCopyFailedDescription": "No se pudo copiar el texto."
+  },
+  "SemanticSearchPage": {
+    "title": "Búsqueda Semántica",
+    "description": "Encuentra información en tus documentos usando lenguaje natural.",
+    "yourFilesTitle": "Tus Archivos",
+    "yourFilesDescription": "Archivos disponibles para buscar.",
+    "enterQueryTitle": "Ingresa tu Consulta de Búsqueda",
+    "enterQueryDescription": "Ej: \"Encuentra mi informe Q1\" o \"detalles sobre el proyecto X\"",
+    "queryPlaceholder": "Escribe tu consulta de búsqueda aquí...",
+    "searchButton": "Buscar",
+    "errorTitle": "Error",
+    "noMatchesAlertTitle": "No se Encontraron Coincidencias",
+    "noMatchesAlertDescription": "Tu búsqueda de \"{query}\" no devolvió ningún archivo relevante. Intenta refinar tu consulta o revisa tus documentos subidos.",
+    "searchResultsTitle": "Resultados de Búsqueda",
+    "searchResultsDescription": "Archivos que coinciden con tu consulta \"{query}\"",
+    "toastEmptyQueryTitle": "Consulta Vacía",
+    "toastEmptyQueryDescription": "Por favor, ingresa una consulta de búsqueda.",
+    "toastNoFilesTitle": "Sin Archivos",
+    "toastNoFilesDescription": "Por favor, sube algunos archivos antes de buscar.",
+    "toastNoResultsTitle": "Sin Resultados",
+    "toastNoResultsDescription": "Ningún archivo coincidió con tu consulta.",
+    "toastSearchCompleteTitle": "Búsqueda Completa",
+    "toastSearchCompleteDescription": "Se encontraron {count} archivo(s) relevante(s).",
+    "toastSearchErrorTitle": "Error de Búsqueda"
+  },
+  "AppLayout": {
+    "loading": "Cargando aplicación..."
+  },
+  "AuthContext": {
+    "loginSuccessfulTitle": "Inicio de Sesión Exitoso",
+    "loginSuccessfulDescription": "¡Bienvenido de nuevo!",
+    "loginFailedTitle": "Fallo en el Inicio de Sesión",
+    "loggedOutTitle": "Sesión Cerrada",
+    "loggedOutDescription": "Has cerrado sesión exitosamente.",
+    "logoutFailedTitle": "Fallo al Cerrar Sesión"
+  },
+  "LandingRedirectPage": {
+    "loading": "Cargando Gnosis.AI..."
+  },
+  "LanguageSwitcher": {
+    "selectLanguage": "Seleccionar idioma"
+  }
+}

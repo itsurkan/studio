@@ -1,4 +1,8 @@
+
 import type {NextConfig} from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
+ 
+const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -18,7 +22,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'lh3.googleusercontent.com', // Added for Google user avatars
+        hostname: 'lh3.googleusercontent.com', 
         port: '',
         pathname: '/**',
       }
@@ -26,4 +30,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

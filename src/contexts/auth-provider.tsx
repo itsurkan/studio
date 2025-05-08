@@ -6,7 +6,9 @@ import { createContext, useEffect, useState, useCallback } from 'react';
 import { type User, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation'; // Use localized router
+import { useTranslations } from 'next-intl'; // Import useTranslations
+
 
 export interface AuthContextType {
   user: User | null;
@@ -26,6 +28,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const router = useRouter();
+  const t = useTranslations('AuthContext'); // Initialize translations
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -40,30 +43,45 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      toast({ title: 'Login Successful', description: 'Welcome back!', className: "bg-accent text-accent-foreground" });
+      toast({ 
+        title: t('loginSuccessfulTitle'), 
+        description: t('loginSuccessfulDescription'), 
+        className: "bg-accent text-accent-foreground" 
+      });
       router.push('/dashboard');
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign in with Google.';
-      toast({ title: 'Login Failed', description: errorMessage, variant: 'destructive' });
+      toast({ 
+        title: t('loginFailedTitle'), 
+        description: errorMessage, 
+        variant: 'destructive' 
+      });
       setLoading(false);
     }
-  }, [toast, router]);
+  }, [toast, router, t]);
 
   const signOutUser = useCallback(async () => {
     setLoading(true);
     try {
       await firebaseSignOut(auth);
-      toast({ title: 'Logged Out', description: 'You have been successfully logged out.' });
+      toast({ 
+        title: t('loggedOutTitle'), 
+        description: t('loggedOutDescription') 
+      });
       router.push('/auth/login');
     } catch (error) {
       console.error("Sign Out Error:", error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign out.';
-      toast({ title: 'Logout Failed', description: errorMessage, variant: 'destructive' });
+      toast({ 
+        title: t('logoutFailedTitle'), 
+        description: errorMessage, 
+        variant: 'destructive' 
+      });
     } finally {
       setLoading(false);
     }
-  }, [toast, router]);
+  }, [toast, router, t]);
 
   return (
     <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOutUser }}>

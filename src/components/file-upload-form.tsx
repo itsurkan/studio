@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useCallback, useId } from "react";
@@ -11,6 +12,7 @@ import { UploadCloud, X, CheckCircle2 } from "lucide-react";
 import type { AppFile } from "@/lib/types";
 import { useFiles } from "@/contexts/file-provider";
 import { FileIcon } from "./file-icon";
+import { useTranslations } from "next-intl";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_FILES_PER_UPLOAD = 10;
@@ -24,6 +26,7 @@ interface UploadableFile {
 }
 
 export function FileUploadForm() {
+  const t = useTranslations('FileUploadForm');
   const [pendingFiles, setPendingFiles] = useState<UploadableFile[]>([]);
   const { addFiles: addUploadedFilesToContext } = useFiles();
   const { toast } = useToast();
@@ -32,15 +35,15 @@ export function FileUploadForm() {
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
     if (pendingFiles.length + acceptedFiles.length > MAX_FILES_PER_UPLOAD) {
         toast({
-            title: "Upload Limit Exceeded",
-            description: `You can only select up to ${MAX_FILES_PER_UPLOAD} files at a time.`,
+            title: t('uploadLimitExceeded'),
+            description: t('uploadLimitExceededDescription', {maxFiles: MAX_FILES_PER_UPLOAD}),
             variant: "destructive",
         });
         return;
     }
 
     const newFiles: UploadableFile[] = acceptedFiles.map(file => ({
-      id: `${file.name}-${file.lastModified}-${Math.random()}`, // Simple unique ID
+      id: `${file.name}-${file.lastModified}-${Math.random()}`,
       file,
       status: "pending",
       progress: 0,
@@ -50,13 +53,13 @@ export function FileUploadForm() {
     fileRejections.forEach((rejection: any) => {
       rejection.errors.forEach((error: any) => {
         toast({
-          title: `File Error: ${rejection.file.name}`,
+          title: t('fileError', {fileName: rejection.file.name}),
           description: error.message,
           variant: "destructive",
         });
       });
     });
-  }, [toast, pendingFiles.length]);
+  }, [toast, pendingFiles.length, t]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -81,23 +84,22 @@ export function FileUploadForm() {
 
   const handleUpload = async () => {
     if (pendingFiles.length === 0) {
-      toast({ title: "No files selected", description: "Please select files to upload.", variant: "default" });
+      toast({ title: t('noFilesSelected'), description: t('noFilesSelectedDescription'), variant: "default" });
       return;
     }
 
     const filesToUpload = pendingFiles.filter(f => f.status === "pending");
     if (filesToUpload.length === 0) {
-        toast({ title: "No new files to upload", description: "All selected files are already processed or being uploaded.", variant: "default" });
+        toast({ title: t('noNewFilesToUpload'), description: t('noNewFilesToUploadDescription'), variant: "default" });
         return;
     }
     
     const appFiles: AppFile[] = [];
 
     for (const uploadableFile of filesToUpload) {
-      setPendingFiles(prev => prev.map(f => f.id === uploadableFile.id ? { ...f, status: "uploading", progress: 0 } : f));
+      setPendingFiles(prev => prev.map(f => f.id === uploadableFile.id ? { ...f, status: t('statusUploading') as "uploading", progress: 0 } : f));
       
       try {
-        // Simulate upload progress
         for (let i = 0; i <= 100; i += 10) {
           await new Promise(resolve => setTimeout(resolve, 50));
           setPendingFiles(prev => prev.map(f => f.id === uploadableFile.id ? { ...f, progress: i } : f));
@@ -107,9 +109,6 @@ export function FileUploadForm() {
         const fileContent = await new Promise<string>((resolve, reject) => {
           reader.onload = () => resolve(reader.result as string);
           reader.onerror = (error) => reject(error);
-          // For MVP, read all as text. This is a simplification.
-          // For PDFs, images, spreadsheets, content might not be human-readable text
-          // but the AI flows expect string content.
           reader.readAsText(uploadableFile.file); 
         });
         
@@ -124,13 +123,13 @@ export function FileUploadForm() {
         };
         appFiles.push(appFile);
 
-        setPendingFiles(prev => prev.map(f => f.id === uploadableFile.id ? { ...f, status: "success", progress: 100 } : f));
+        setPendingFiles(prev => prev.map(f => f.id === uploadableFile.id ? { ...f, status: t('statusSuccess') as "success", progress: 100 } : f));
       } catch (error) {
         console.error("Upload error:", error);
         const errorMessage = error instanceof Error ? error.message : "Unknown error";
-        setPendingFiles(prev => prev.map(f => f.id === uploadableFile.id ? { ...f, status: "error", error: `Upload failed: ${errorMessage}` } : f));
+        setPendingFiles(prev => prev.map(f => f.id === uploadableFile.id ? { ...f, status: t('statusError') as "error", error: `${t('uploadFailed', {fileName: uploadableFile.file.name})}: ${errorMessage}` } : f));
         toast({
-          title: `Upload Failed: ${uploadableFile.file.name}`,
+          title: t('uploadFailed', {fileName: uploadableFile.file.name}),
           description: errorMessage,
           variant: "destructive",
         });
@@ -140,14 +139,12 @@ export function FileUploadForm() {
     if (appFiles.length > 0) {
       addUploadedFilesToContext(appFiles);
       toast({
-        title: "Upload Successful",
-        description: `${appFiles.length} file(s) processed.`,
+        title: t('uploadSuccessful'),
+        description: t('uploadSuccessfulDescription', {count: appFiles.length}),
         variant: "default",
         className: "bg-accent text-accent-foreground"
       });
     }
-     // Clear successfully uploaded files from pending list or keep them with success status
-     // For this version, let's keep them to show status, they will be cleared on "Clear All" or manual removal.
   };
   
   const clearAllFiles = () => {
@@ -157,8 +154,8 @@ export function FileUploadForm() {
   return (
     <Card className="w-full shadow-lg">
       <CardHeader>
-        <CardTitle>Upload Your Files</CardTitle>
-        <CardDescription>Drag & drop files or click to select. Max 5MB per file, {MAX_FILES_PER_UPLOAD} files total.</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('description', {maxFiles: MAX_FILES_PER_UPLOAD})}</CardDescription>
       </CardHeader>
       <CardContent>
         <div
@@ -171,15 +168,15 @@ export function FileUploadForm() {
           <input {...getInputProps()} id={`${formId}-input`} disabled={pendingFiles.length >= MAX_FILES_PER_UPLOAD} />
           <UploadCloud className={`w-12 h-12 mb-4 ${isDragActive ? "text-primary" : "text-muted-foreground"}`} />
           {isDragActive ? (
-            <p className="text-primary font-semibold">Drop the files here ...</p>
+            <p className="text-primary font-semibold">{t('dropzoneActive')}</p>
           ) : (
-            <p className="text-muted-foreground">Drag 'n' drop some files here, or click to select files</p>
+            <p className="text-muted-foreground">{t('dropzoneDefault')}</p>
           )}
         </div>
 
         {pendingFiles.length > 0 && (
           <div className="mt-6">
-            <h3 className="text-lg font-medium mb-2">Selected Files:</h3>
+            <h3 className="text-lg font-medium mb-2">{t('selectedFiles')}</h3>
             <ScrollArea className="h-60 w-full pr-4">
               <ul className="space-y-3">
                 {pendingFiles.map(pf => (
@@ -198,7 +195,7 @@ export function FileUploadForm() {
                     <div className="flex items-center space-x-2">
                         {pf.status === "success" && <CheckCircle2 className="w-5 h-5 text-accent" />}
                         {(pf.status === "pending" || pf.status === "error") && (
-                             <Button variant="ghost" size="icon" onClick={() => removePendingFile(pf.id)} aria-label={`Remove ${pf.file.name}`}>
+                             <Button variant="ghost" size="icon" onClick={() => removePendingFile(pf.id)} aria-label={t('removeFile', {fileName: pf.file.name})}>
                                 <X className="w-4 h-4" />
                             </Button>
                         )}
@@ -209,14 +206,14 @@ export function FileUploadForm() {
             </ScrollArea>
             <div className="mt-6 flex flex-col sm:flex-row sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3">
               <Button variant="outline" onClick={clearAllFiles} disabled={pendingFiles.filter(f => f.status === 'uploading').length > 0}>
-                Clear All
+                {t('clearAll')}
               </Button>
               <Button 
                 onClick={handleUpload} 
                 disabled={pendingFiles.filter(f => f.status === 'pending').length === 0 || pendingFiles.filter(f => f.status === 'uploading').length > 0}
                 className="bg-accent hover:bg-accent/90 text-accent-foreground"
               >
-                {pendingFiles.filter(f => f.status === 'uploading').length > 0 ? "Processing..." : "Process Selected Files"}
+                {pendingFiles.filter(f => f.status === 'uploading').length > 0 ? t('processing') : t('processSelectedFiles')}
               </Button>
             </div>
           </div>

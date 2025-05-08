@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,12 +11,14 @@ import { useFiles } from "@/contexts/file-provider";
 import { ragBasedQuery, type RagBasedQueryInput, type RagBasedQueryOutput } from "@/ai/flows/rag-based-query";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, MessageSquarePlus, AlertTriangle, Info, Download, Copy } from "lucide-react";
-import type { AppFile, OutputFormat } from "@/lib/types";
+import type { OutputFormat } from "@/lib/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Label } from "@/components/ui/label";
+import { useTranslations } from "next-intl";
 
 export default function RagPage() {
+  const t = useTranslations('RagPage');
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [outputFormat, setOutputFormat] = useState<OutputFormat>("paragraphs");
@@ -30,11 +33,11 @@ export default function RagPage() {
 
   const handleQuery = async () => {
     if (!selectedFile) {
-      toast({ title: "No File Selected", description: "Please select a file to query.", variant: "default" });
+      toast({ title: t('toastNoFileSelectedTitle'), description: t('toastNoFileSelectedDescription'), variant: "default" });
       return;
     }
     if (!query.trim()) {
-      toast({ title: "Empty Query", description: "Please enter a question or request.", variant: "default" });
+      toast({ title: t('toastEmptyQueryTitle'), description: t('toastEmptyQueryDescription'), variant: "default" });
       return;
     }
 
@@ -52,8 +55,8 @@ export default function RagPage() {
       const result: RagBasedQueryOutput = await ragBasedQuery(ragInput);
       setRagResult(result.answer);
       toast({
-        title: "Query Successful",
-        description: "AI has generated a response.",
+        title: t('toastQuerySuccessfulTitle'),
+        description: t('toastQuerySuccessfulDescription'),
         variant: "default",
         className: "bg-accent text-accent-foreground"
       });
@@ -63,7 +66,7 @@ export default function RagPage() {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred during RAG processing.";
       setError(errorMessage);
       toast({
-        title: "Query Error",
+        title: t('toastQueryErrorTitle'),
         description: errorMessage,
         variant: "destructive",
       });
@@ -75,8 +78,8 @@ export default function RagPage() {
   const handleCopyResult = () => {
     if (ragResult) {
       navigator.clipboard.writeText(ragResult)
-        .then(() => toast({ title: "Copied!", description: "Result copied to clipboard.", className: "bg-accent text-accent-foreground" }))
-        .catch(err => toast({ title: "Copy Failed", description: "Could not copy text.", variant: "destructive" }));
+        .then(() => toast({ title: t('toastCopiedTitle'), description: t('toastCopiedDescription'), className: "bg-accent text-accent-foreground" }))
+        .catch(err => toast({ title: t('toastCopyFailedTitle'), description: t('toastCopyFailedDescription'), variant: "destructive" }));
     }
   };
 
@@ -98,16 +101,16 @@ export default function RagPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Ask Your Data (RAG)</h1>
-        <p className="text-muted-foreground">Get answers and summaries from your selected document.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-1">
           <Card className="shadow-md sticky top-24">
             <CardHeader>
-              <CardTitle>Select a File</CardTitle>
-              <CardDescription>Choose a document to query.</CardDescription>
+              <CardTitle>{t('selectFileTitle')}</CardTitle>
+              <CardDescription>{t('selectFileDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <FileList 
@@ -123,18 +126,16 @@ export default function RagPage() {
         <div className="md:col-span-2 space-y-6">
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle>Ask a Question or Request a Summary</CardTitle>
-              <CardDescription>
-                Ensure you have selected a file first. Example: "Summarize this document." or "What are the key financial figures?"
-              </CardDescription>
+              <CardTitle>{t('askQuestionTitle')}</CardTitle>
+              <CardDescription>{t('askQuestionDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={(e) => { e.preventDefault(); handleQuery(); }} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="rag-query">Your Query</Label>
+                  <Label htmlFor="rag-query">{t('yourQueryLabel')}</Label>
                   <Textarea
                     id="rag-query"
-                    placeholder="Type your question or summarization request here..."
+                    placeholder={t('queryPlaceholder')}
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     rows={4}
@@ -143,18 +144,18 @@ export default function RagPage() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="output-format">Output Format</Label>
+                  <Label htmlFor="output-format">{t('outputFormatLabel')}</Label>
                   <Select
                     value={outputFormat}
                     onValueChange={(value: OutputFormat) => setOutputFormat(value)}
                     disabled={isLoading || !selectedFile}
                   >
                     <SelectTrigger id="output-format" className="w-full sm:w-[180px]">
-                      <SelectValue placeholder="Select format" />
+                      <SelectValue placeholder={t('outputFormatPlaceholder')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="paragraphs">Paragraphs</SelectItem>
-                      <SelectItem value="bullets">Bullet Points</SelectItem>
+                      <SelectItem value="paragraphs">{t('formatParagraphs')}</SelectItem>
+                      <SelectItem value="bullets">{t('formatBullets')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -164,7 +165,7 @@ export default function RagPage() {
                   ) : (
                     <MessageSquarePlus className="mr-2 h-4 w-4" />
                   )}
-                  Get Answer
+                  {t('getAnswer')}
                 </Button>
               </form>
             </CardContent>
@@ -173,7 +174,7 @@ export default function RagPage() {
           {error && (
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t('errorTitle')}</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
@@ -181,9 +182,9 @@ export default function RagPage() {
           {!selectedFile && !isLoading && (
              <Alert variant="default">
                 <Info className="h-4 w-4" />
-                <AlertTitle>Select a File</AlertTitle>
+                <AlertTitle>{t('selectAFileAlertTitle')}</AlertTitle>
                 <AlertDescription>
-                  Please select a file from the list on the left to start asking questions.
+                  {t('selectAFileAlertDescription')}
                 </AlertDescription>
               </Alert>
           )}
@@ -192,14 +193,14 @@ export default function RagPage() {
             <Card className="shadow-md">
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle>AI Generated Response</CardTitle>
-                  <CardDescription>For file: {selectedFile?.name}</CardDescription>
+                  <CardTitle>{t('aiResponseTitle')}</CardTitle>
+                  <CardDescription>{t('aiResponseForFile', {fileName: selectedFile?.name})}</CardDescription>
                 </div>
                 <div className="flex space-x-2">
-                  <Button variant="outline" size="icon" onClick={handleCopyResult} title="Copy result">
+                  <Button variant="outline" size="icon" onClick={handleCopyResult} title={t('copyResult')}>
                     <Copy className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" size="icon" onClick={handleDownloadResult} title="Download result">
+                  <Button variant="outline" size="icon" onClick={handleDownloadResult} title={t('downloadResult')}>
                     <Download className="h-4 w-4" />
                   </Button>
                 </div>

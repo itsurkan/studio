@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,10 +12,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, SearchIcon, AlertTriangle, Info } from "lucide-react";
 import type { AppFile } from "@/lib/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTranslations } from "next-intl";
 
 
 export default function SemanticSearchPage() {
+  const t = useTranslations('SemanticSearchPage');
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState<AppFile[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,11 +26,11 @@ export default function SemanticSearchPage() {
 
   const handleSearch = async () => {
     if (!query.trim()) {
-      toast({ title: "Empty Query", description: "Please enter a search query.", variant: "default" });
+      toast({ title: t('toastEmptyQueryTitle'), description: t('toastEmptyQueryDescription'), variant: "default" });
       return;
     }
     if (allUploadedFiles.length === 0) {
-      toast({ title: "No Files", description: "Please upload some files before searching.", variant: "default" });
+      toast({ title: t('toastNoFilesTitle'), description: t('toastNoFilesDescription'), variant: "default" });
       return;
     }
 
@@ -42,7 +44,6 @@ export default function SemanticSearchPage() {
         files: allUploadedFiles.map(f => ({ name: f.name, data: f.content })),
       };
       
-      // This is a client-side call to a server action.
       const result: SemanticSearchOutput = await semanticSearch(searchInput);
       
       const relevantAppFiles = allUploadedFiles.filter(appFile => 
@@ -53,14 +54,14 @@ export default function SemanticSearchPage() {
 
       if (relevantAppFiles.length === 0) {
         toast({
-          title: "No Results",
-          description: "No files matched your query.",
+          title: t('toastNoResultsTitle'),
+          description: t('toastNoResultsDescription'),
           variant: "default",
         });
       } else {
          toast({
-          title: "Search Complete",
-          description: `Found ${relevantAppFiles.length} relevant file(s).`,
+          title: t('toastSearchCompleteTitle'),
+          description: t('toastSearchCompleteDescription', {count: relevantAppFiles.length}),
           variant: "default",
           className: "bg-accent text-accent-foreground"
         });
@@ -71,7 +72,7 @@ export default function SemanticSearchPage() {
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred during search.";
       setError(errorMessage);
       toast({
-        title: "Search Error",
+        title: t('toastSearchErrorTitle'),
         description: errorMessage,
         variant: "destructive",
       });
@@ -83,16 +84,16 @@ export default function SemanticSearchPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">Semantic Search</h1>
-        <p className="text-muted-foreground">Find information across your documents using natural language.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('title')}</h1>
+        <p className="text-muted-foreground">{t('description')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div className="md:col-span-1">
-          <Card className="shadow-md sticky top-24"> {/* Sticky for better UX on scroll */}
+          <Card className="shadow-md sticky top-24"> 
             <CardHeader>
-              <CardTitle>Your Files</CardTitle>
-              <CardDescription>Files available for searching.</CardDescription>
+              <CardTitle>{t('yourFilesTitle')}</CardTitle>
+              <CardDescription>{t('yourFilesDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <FileList showActions={false} maxHeight="max-h-[calc(100vh-20rem)]" />
@@ -103,14 +104,14 @@ export default function SemanticSearchPage() {
         <div className="md:col-span-2 space-y-6">
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle>Enter Your Search Query</CardTitle>
-              <CardDescription>E.g., "Find my Q1 report" or "details about project X"</CardDescription>
+              <CardTitle>{t('enterQueryTitle')}</CardTitle>
+              <CardDescription>{t('enterQueryDescription')}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }} className="space-y-4">
                 <Input
                   type="text"
-                  placeholder="Type your search query here..."
+                  placeholder={t('queryPlaceholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   className="text-base"
@@ -122,7 +123,7 @@ export default function SemanticSearchPage() {
                   ) : (
                     <SearchIcon className="mr-2 h-4 w-4" />
                   )}
-                  Search
+                  {t('searchButton')}
                 </Button>
               </form>
             </CardContent>
@@ -131,7 +132,7 @@ export default function SemanticSearchPage() {
           {error && (
             <Alert variant="destructive">
               <AlertTriangle className="h-4 w-4" />
-              <AlertTitle>Error</AlertTitle>
+              <AlertTitle>{t('errorTitle')}</AlertTitle>
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
@@ -139,9 +140,9 @@ export default function SemanticSearchPage() {
           { !isLoading && searchResults.length === 0 && query && !error && (
              <Alert variant="default">
               <Info className="h-4 w-4" />
-              <AlertTitle>No Matches Found</AlertTitle>
+              <AlertTitle>{t('noMatchesAlertTitle')}</AlertTitle>
               <AlertDescription>
-                Your search for "{query}" did not return any relevant files. Try refining your query or check your uploaded documents.
+                {t('noMatchesAlertDescription', {query})}
               </AlertDescription>
             </Alert>
           )}
@@ -149,8 +150,8 @@ export default function SemanticSearchPage() {
           {searchResults.length > 0 && (
             <Card className="shadow-md">
               <CardHeader>
-                <CardTitle>Search Results</CardTitle>
-                <CardDescription>Files matching your query "{query}"</CardDescription>
+                <CardTitle>{t('searchResultsTitle')}</CardTitle>
+                <CardDescription>{t('searchResultsDescription', {query})}</CardDescription>
               </CardHeader>
               <CardContent>
                  <FileList files={searchResults} showActions={true} maxHeight="max-h-96" />

@@ -1,0 +1,145 @@
+
+{
+  "AppHeader": {
+    "title": "Gnosis.AI",
+    "toggleMenu": "Toggle Menu"
+  },
+  "AppSidebarNav": {
+    "dashboard": "Dashboard",
+    "semanticSearch": "Semantic Search",
+    "rag": "Ask Your Data (RAG)"
+  },
+  "DashboardPage": {
+    "welcome": "Welcome to Gnosis.AI",
+    "description": "Upload, search, and analyze your documents with ease.",
+    "quickTipsTitle": "Quick Tips",
+    "tipUpload": "<strong>Upload:</strong> Drag & drop or click to upload text, PDFs, spreadsheets, and images.",
+    "tipSearch": "<strong>Search:</strong> Use the Semantic Search page to find information within your documents using natural language.",
+    "tipAnalyze": "<strong>Analyze:</strong> Ask questions or request summaries on the RAG page to get AI-powered insights.",
+    "integrationsTitle": "Integrations",
+    "integrationsDescription": "Connect with Google Drive & Dropbox",
+    "integrationsComingSoon": "Import files directly from your cloud storage. (Coming soon via Zapier)"
+  },
+  "UserNav": {
+    "login": "Login",
+    "dashboard": "Dashboard",
+    "logout": "Log out",
+    "userAvatarAlt": "User Avatar",
+    "user": "User",
+    "settings": "Settings"
+  },
+  "LoginPage": {
+    "title": "Gnosis.AI",
+    "description": "Unlock insights from your data. Sign in to get started.",
+    "intro": "Upload your documents, ask questions, and get intelligent summaries. Simplify your workflow and discover hidden knowledge.",
+    "signInWithGoogle": "Sign In with Google",
+    "loading": "Loading...",
+    "footer": "&copy; {year} Gnosis.AI. Secure and Intelligent."
+  },
+  "FileUploadForm": {
+    "title": "Upload Your Files",
+    "description": "Drag & drop files or click to select. Max 5MB per file, {maxFiles} files total.",
+    "dropzoneActive": "Drop the files here ...",
+    "dropzoneDefault": "Drag 'n' drop some files here, or click to select files",
+    "selectedFiles": "Selected Files:",
+    "uploadLimitExceeded": "Upload Limit Exceeded",
+    "uploadLimitExceededDescription": "You can only select up to {maxFiles} files at a time.",
+    "fileError": "File Error: {fileName}",
+    "noFilesSelected": "No files selected",
+    "noFilesSelectedDescription": "Please select files to upload.",
+    "noNewFilesToUpload": "No new files to upload",
+    "noNewFilesToUploadDescription": "All selected files are already processed or being uploaded.",
+    "uploadFailed": "Upload Failed: {fileName}",
+    "uploadSuccessful": "Upload Successful",
+    "uploadSuccessfulDescription": "{count} file(s) processed.",
+    "removeFile": "Remove {fileName}",
+    "statusUploading": "uploading",
+    "statusError": "error",
+    "statusSuccess": "success",
+    "clearAll": "Clear All",
+    "processSelectedFiles": "Process Selected Files",
+    "processing": "Processing..."
+  },
+  "FileList": {
+    "myFiles": "My Files",
+    "manageDocuments": "Manage your uploaded documents.",
+    "noFilesUploaded": "No files uploaded yet.",
+    "uploadToStart": "Upload some files to get started.",
+    "downloadFile": "Download {fileName}",
+    "removeFile": "Remove {fileName}"
+  },
+  "RagPage": {
+    "title": "Ask Your Data (RAG)",
+    "description": "Get answers and summaries from your selected document.",
+    "selectFileTitle": "Select a File",
+    "selectFileDescription": "Choose a document to query.",
+    "askQuestionTitle": "Ask a Question or Request a Summary",
+    "askQuestionDescription": "Ensure you have selected a file first. Example: \"Summarize this document.\" or \"What are the key financial figures?\"",
+    "yourQueryLabel": "Your Query",
+    "queryPlaceholder": "Type your question or summarization request here...",
+    "outputFormatLabel": "Output Format",
+    "outputFormatPlaceholder": "Select format",
+    "formatParagraphs": "Paragraphs",
+    "formatBullets": "Bullet Points",
+    "getAnswer": "Get Answer",
+    "errorTitle": "Error",
+    "selectAFileAlertTitle": "Select a File",
+    "selectAFileAlertDescription": "Please select a file from the list on the left to start asking questions.",
+    "aiResponseTitle": "AI Generated Response",
+    "aiResponseForFile": "For file: {fileName}",
+    "copyResult": "Copy result",
+    "downloadResult": "Download result",
+    "toastNoFileSelectedTitle": "No File Selected",
+    "toastNoFileSelectedDescription": "Please select a file to query.",
+    "toastEmptyQueryTitle": "Empty Query",
+    "toastEmptyQueryDescription": "Please enter a question or request.",
+    "toastQuerySuccessfulTitle": "Query Successful",
+    "toastQuerySuccessfulDescription": "AI has generated a response.",
+    "toastQueryErrorTitle": "Query Error",
+    "toastCopiedTitle": "Copied!",
+    "toastCopiedDescription": "Result copied to clipboard.",
+    "toastCopyFailedTitle": "Copy Failed",
+    "toastCopyFailedDescription": "Could not copy text."
+  },
+  "SemanticSearchPage": {
+    "title": "Semantic Search",
+    "description": "Find information across your documents using natural language.",
+    "yourFilesTitle": "Your Files",
+    "yourFilesDescription": "Files available for searching.",
+    "enterQueryTitle": "Enter Your Search Query",
+    "enterQueryDescription": "E.g., \"Find my Q1 report\" or \"details about project X\"",
+    "queryPlaceholder": "Type your search query here...",
+    "searchButton": "Search",
+    "errorTitle": "Error",
+    "noMatchesAlertTitle": "No Matches Found",
+    "noMatchesAlertDescription": "Your search for \"{query}\" did not return any relevant files. Try refining your query or check your uploaded documents.",
+    "searchResultsTitle": "Search Results",
+    "searchResultsDescription": "Files matching your query \"{query}\"",
+    "toastEmptyQueryTitle": "Empty Query",
+    "toastEmptyQueryDescription": "Please enter a search query.",
+    "toastNoFilesTitle": "No Files",
+    "toastNoFilesDescription": "Please upload some files before searching.",
+    "toastNoResultsTitle": "No Results",
+    "toastNoResultsDescription": "No files matched your query.",
+    "toastSearchCompleteTitle": "Search Complete",
+    "toastSearchCompleteDescription": "Found {count} relevant file(s).",
+    "toastSearchErrorTitle": "Search Error"
+  },
+  "AppLayout": {
+    "loading": "Loading application..."
+  },
+  "AuthContext": {
+    "loginSuccessfulTitle": "Login Successful",
+    "loginSuccessfulDescription": "Welcome back!",
+    "loginFailedTitle": "Login Failed",
+    "loggedOutTitle": "Logged Out",
+    "loggedOutDescription": "You have been successfully logged out.",
+    "logoutFailedTitle": "Logout Failed"
+  },
+  "LandingRedirectPage": {
+    "loading": "Loading Gnosis.AI..."
+  },
+  "LanguageSwitcher": {
+    "selectLanguage": "Select language"
+  }
+}
