@@ -32,9 +32,9 @@ export default function DashboardPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm text-muted-foreground">
-              <p dangerouslySetInnerHTML={{ __html: t('tipUpload') }} />
-              <p dangerouslySetInnerHTML={{ __html: t('tipSearch') }} />
-              <p dangerouslySetInnerHTML={{ __html: t('tipAnalyze') }} />
+              <p dangerouslySetInnerHTML={{ __html: t.markup('tipUpload', { bold_text: (chunks) => `<strong>${chunks}</strong>` }) }} />
+              <p dangerouslySetInnerHTML={{ __html: t.markup('tipSearch', { bold_text: (chunks) => `<strong>${chunks}</strong>` }) }} />
+              <p dangerouslySetInnerHTML={{ __html: t.markup('tipAnalyze', { bold_text: (chunks) => `<strong>${chunks}</strong>` }) }} />
             </CardContent>
           </Card>
           

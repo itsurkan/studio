@@ -14,9 +14,9 @@
     "welcome": "Bienvenido a Gnosis.AI",
     "description": "Sube, busca y analiza tus documentos con facilidad.",
     "quickTipsTitle": "Consejos Rápidos",
-    "tipUpload": "<strong>Subir:</strong> Arrastra y suelta o haz clic para subir texto, PDFs, hojas de cálculo e imágenes.",
-    "tipSearch": "<strong>Buscar:</strong> Usa la página de Búsqueda Semántica para encontrar información en tus documentos usando lenguaje natural.",
-    "tipAnalyze": "<strong>Analizar:</strong> Haz preguntas o solicita resúmenes en la página RAG para obtener información impulsada por IA.",
+    "tipUpload": "<bold_text>Subir:</bold_text> Arrastra y suelta o haz clic para subir texto, PDFs, hojas de cálculo e imágenes.",
+    "tipSearch": "<bold_text>Buscar:</bold_text> Usa la página de Búsqueda Semántica para encontrar información en tus documentos usando lenguaje natural.",
+    "tipAnalyze": "<bold_text>Analizar:</bold_text> Haz preguntas o solicita resúmenes en la página RAG para obtener información impulsada por IA.",
     "integrationsTitle": "Integraciones",
     "integrationsDescription": "Conecta con Google Drive y Dropbox",
     "integrationsComingSoon": "Importa archivos directamente desde tu almacenamiento en la nube. (Próximamente vía Zapier)"
@@ -156,4 +156,3 @@
     "comingSoon": "Más configuraciones próximamente."
   }
 }
-
