@@ -10,7 +10,8 @@ export const pathnames = {
   '/dashboard': '/dashboard',
   '/search': '/search',
   '/rag': '/rag',
-  '/auth/login': '/auth/login'
+  '/auth/login': '/auth/login',
+  '/settings': '/settings'
 } as const;
 
 export type AppPathnames = keyof typeof pathnames;

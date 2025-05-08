@@ -7,7 +7,8 @@
   "AppSidebarNav": {
     "dashboard": "Panel",
     "semanticSearch": "Búsqueda Semántica",
-    "rag": "Pregunta a tus Datos (RAG)"
+    "rag": "Pregunta a tus Datos (RAG)",
+    "settings": "Configuración"
   },
   "DashboardPage": {
     "welcome": "Bienvenido a Gnosis.AI",
@@ -141,5 +142,18 @@
   },
   "LanguageSwitcher": {
     "selectLanguage": "Seleccionar idioma"
+  },
+  "SettingsPage": {
+    "title": "Configuración de la Aplicación",
+    "description": "Administra tus preferencias y configura los ajustes de la aplicación.",
+    "languageSettingsTitle": "Idioma",
+    "languageSettingsDescription": "Elige tu idioma de visualización preferido.",
+    "currentLanguageHint": "La interfaz de la aplicación se actualizará al idioma seleccionado.",
+    "profileSettingsTitle": "Configuración del Perfil",
+    "profileSettingsDescription": "Administra la información de tu perfil de usuario.",
+    "notificationSettingsTitle": "Notificaciones",
+    "notificationSettingsDescription": "Configura tus preferencias de notificación.",
+    "comingSoon": "Más configuraciones próximamente."
   }
 }
+

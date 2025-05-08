@@ -4,7 +4,7 @@
 import { Link, usePathname } from "@/navigation"; // Use localized Link and usePathname
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
-import { Home, Search, MessageSquareText } from "lucide-react";
+import { Home, Search, MessageSquareText, Settings } from "lucide-react";
 import { useTranslations } from 'next-intl';
 
 export function AppSidebarNav() {
@@ -15,6 +15,7 @@ export function AppSidebarNav() {
     { href: "/dashboard" as const, labelKey: "dashboard", icon: Home },
     { href: "/search" as const, labelKey: "semanticSearch", icon: Search },
     { href: "/rag" as const, labelKey: "rag", icon: MessageSquareText },
+    { href: "/settings" as const, labelKey: "settings", icon: Settings },
   ];
 
   return (
@@ -35,3 +36,4 @@ export function AppSidebarNav() {
     </nav>
   );
 }
+

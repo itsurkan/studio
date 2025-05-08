@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
-import { LogOut, User as UserIcon, LayoutDashboard } from "lucide-react";
+import { LogOut, User as UserIcon, LayoutDashboard, Settings } from "lucide-react";
 import { Link } from "@/navigation"; // Use localized Link
 import { useTranslations } from 'next-intl';
 
@@ -68,12 +68,12 @@ export function UserNav() {
               <span>{t('dashboard')}</span>
             </DropdownMenuItem>
           </Link>
-          {/* <Link href="/settings" passHref legacyBehavior>
-            <DropdownMenuItem disabled>
+          <Link href="/settings" passHref legacyBehavior>
+            <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
               <span>{t('settings')}</span>
             </DropdownMenuItem>
-          </Link> */}
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={signOutUser}>
@@ -84,3 +84,4 @@ export function UserNav() {
     </DropdownMenu>
   );
 }
+
