@@ -1,0 +1,158 @@
+
+{
+  "AppHeader": {
+    "title": "Gnosis.AI",
+    "toggleMenu": "Перемкнути Меню"
+  },
+  "AppSidebarNav": {
+    "dashboard": "Панель",
+    "semanticSearch": "Семантичний Пошук",
+    "rag": "Запитай свої дані (RAG)",
+    "settings": "Налаштування"
+  },
+  "DashboardPage": {
+    "welcome": "Ласкаво просимо до Gnosis.AI",
+    "description": "Завантажуйте, шукайте та аналізуйте свої документи з легкістю.",
+    "quickTipsTitle": "Швидкі Поради",
+    "tipUpload": "<strong>Завантажити:</strong> Перетягніть або клацніть, щоб завантажити текстові файли, PDF, таблиці та зображення.",
+    "tipSearch": "<strong>Пошук:</strong> Використовуйте сторінку Семантичного Пошуку для пошуку інформації у ваших документах природною мовою.",
+    "tipAnalyze": "<strong>Аналізувати:</strong> Ставте запитання або запитуйте резюме на сторінці RAG, щоб отримати аналітику на основі ШІ.",
+    "integrationsTitle": "Інтеграції",
+    "integrationsDescription": "Підключіться до Google Drive та Dropbox",
+    "integrationsComingSoon": "Імпортуйте файли безпосередньо з вашого хмарного сховища. (Незабаром через Zapier)"
+  },
+  "UserNav": {
+    "login": "Увійти",
+    "dashboard": "Панель",
+    "logout": "Вийти",
+    "userAvatarAlt": "Аватар користувача",
+    "user": "Користувач",
+    "settings": "Налаштування"
+  },
+  "LoginPage": {
+    "title": "Gnosis.AI",
+    "description": "Отримуйте цінну інформацію з ваших даних. Увійдіть, щоб почати.",
+    "intro": "Завантажуйте документи, ставте запитання та отримуйте інтелектуальні резюме. Спростіть свій робочий процес та відкрийте приховані знання.",
+    "signInWithGoogle": "Увійти через Google",
+    "loading": "Завантаження...",
+    "footer": "&copy; {year} Gnosis.AI. Безпечно та інтелектуально."
+  },
+  "FileUploadForm": {
+    "title": "Завантажте Ваші Файли",
+    "description": "Перетягніть файли або клацніть для вибору. Макс. 5MB на файл, {maxFiles} файлів загалом.",
+    "dropzoneActive": "Перетягніть файли сюди ...",
+    "dropzoneDefault": "Перетягніть файли сюди, або клацніть для вибору файлів",
+    "selectedFiles": "Вибрані Файли:",
+    "uploadLimitExceeded": "Перевищено Ліміт Завантаження",
+    "uploadLimitExceededDescription": "Ви можете вибрати не більше {maxFiles} файлів одночасно.",
+    "fileError": "Помилка Файлу: {fileName}",
+    "noFilesSelected": "Файли не вибрано",
+    "noFilesSelectedDescription": "Будь ласка, виберіть файли для завантаження.",
+    "noNewFilesToUpload": "Немає нових файлів для завантаження",
+    "noNewFilesToUploadDescription": "Усі вибрані файли вже оброблені або завантажуються.",
+    "uploadFailed": "Помилка Завантаження: {fileName}",
+    "uploadSuccessful": "Завантаження Успішне",
+    "uploadSuccessfulDescription": "{count} файл(и) оброблено.",
+    "removeFile": "Видалити {fileName}",
+    "statusUploading": "завантаження",
+    "statusError": "помилка",
+    "statusSuccess": "успішно",
+    "clearAll": "Очистити Все",
+    "processSelectedFiles": "Обробити Вибрані Файли",
+    "processing": "Обробка..."
+  },
+  "FileList": {
+    "myFiles": "Мої Файли",
+    "manageDocuments": "Керуйте завантаженими документами.",
+    "noFilesUploaded": "Ще не завантажено жодного файлу.",
+    "uploadToStart": "Завантажте файли, щоб почати.",
+    "downloadFile": "Завантажити {fileName}",
+    "removeFile": "Видалити {fileName}"
+  },
+  "RagPage": {
+    "title": "Запитай свої дані (RAG)",
+    "description": "Отримуйте відповіді та резюме з вибраного документа.",
+    "selectFileTitle": "Виберіть Файл",
+    "selectFileDescription": "Оберіть документ для запиту.",
+    "askQuestionTitle": "Поставте Запитання або Запросіть Резюме",
+    "askQuestionDescription": "Переконайтеся, що ви спочатку вибрали файл. Наприклад: \"Зроби резюме цього документа.\" або \"Які ключові фінансові показники?\"",
+    "yourQueryLabel": "Ваш Запит",
+    "queryPlaceholder": "Введіть ваше запитання або запит на резюме тут...",
+    "outputFormatLabel": "Формат Виводу",
+    "outputFormatPlaceholder": "Виберіть формат",
+    "formatParagraphs": "Абзаци",
+    "formatBullets": "Маркери",
+    "getAnswer": "Отримати Відповідь",
+    "errorTitle": "Помилка",
+    "selectAFileAlertTitle": "Виберіть Файл",
+    "selectAFileAlertDescription": "Будь ласка, виберіть файл зі списку ліворуч, щоб почати ставити запитання.",
+    "aiResponseTitle": "Відповідь, Згенерована ШІ",
+    "aiResponseForFile": "Для файлу: {fileName}",
+    "copyResult": "Копіювати результат",
+    "downloadResult": "Завантажити результат",
+    "toastNoFileSelectedTitle": "Файл не вибрано",
+    "toastNoFileSelectedDescription": "Будь ласка, виберіть файл для запиту.",
+    "toastEmptyQueryTitle": "Порожній Запит",
+    "toastEmptyQueryDescription": "Будь ласка, введіть запитання або запит.",
+    "toastQuerySuccessfulTitle": "Запит Успішний",
+    "toastQuerySuccessfulDescription": "ШІ згенерував відповідь.",
+    "toastQueryErrorTitle": "Помилка Запиту",
+    "toastCopiedTitle": "Скопійовано!",
+    "toastCopiedDescription": "Результат скопійовано до буфера обміну.",
+    "toastCopyFailedTitle": "Помилка Копіювання",
+    "toastCopyFailedDescription": "Не вдалося скопіювати текст."
+  },
+  "SemanticSearchPage": {
+    "title": "Семантичний Пошук",
+    "description": "Знаходьте інформацію у ваших документах за допомогою природної мови.",
+    "yourFilesTitle": "Ваші Файли",
+    "yourFilesDescription": "Файли, доступні для пошуку.",
+    "enterQueryTitle": "Введіть Ваш Пошуковий Запит",
+    "enterQueryDescription": "Наприклад, \"Знайди мій звіт за 1 квартал\" або \"деталі про проект X\"",
+    "queryPlaceholder": "Введіть ваш пошуковий запит тут...",
+    "searchButton": "Шукати",
+    "errorTitle": "Помилка",
+    "noMatchesAlertTitle": "Збігів не знайдено",
+    "noMatchesAlertDescription": "Ваш пошук за запитом \"{query}\" не дав результатів. Спробуйте уточнити запит або перевірте завантажені документи.",
+    "searchResultsTitle": "Результати Пошуку",
+    "searchResultsDescription": "Файли, що відповідають вашому запиту \"{query}\"",
+    "toastEmptyQueryTitle": "Порожній Запит",
+    "toastEmptyQueryDescription": "Будь ласка, введіть пошуковий запит.",
+    "toastNoFilesTitle": "Немає Файлів",
+    "toastNoFilesDescription": "Будь ласка, завантажте файли перед пошуком.",
+    "toastNoResultsTitle": "Немає Результатів",
+    "toastNoResultsDescription": "Жоден файл не відповідав вашому запиту.",
+    "toastSearchCompleteTitle": "Пошук Завершено",
+    "toastSearchCompleteDescription": "Знайдено {count} релевантний(і) файл(и).",
+    "toastSearchErrorTitle": "Помилка Пошуку"
+  },
+  "AppLayout": {
+    "loading": "Завантаження програми..."
+  },
+  "AuthContext": {
+    "loginSuccessfulTitle": "Вхід Успішний",
+    "loginSuccessfulDescription": "З поверненням!",
+    "loginFailedTitle": "Помилка Входу",
+    "loggedOutTitle": "Вихід Успішний",
+    "loggedOutDescription": "Ви успішно вийшли з системи.",
+    "logoutFailedTitle": "Помилка Виходу"
+  },
+  "LandingRedirectPage": {
+    "loading": "Завантаження Gnosis.AI..."
+  },
+  "LanguageSwitcher": {
+    "selectLanguage": "Виберіть мову"
+  },
+  "SettingsPage": {
+    "title": "Налаштування Додатка",
+    "description": "Керуйте своїми вподобаннями та налаштуваннями додатка.",
+    "languageSettingsTitle": "Мова",
+    "languageSettingsDescription": "Оберіть бажану мову відображення.",
+    "currentLanguageHint": "Інтерфейс додатка оновиться до вибраної мови.",
+    "profileSettingsTitle": "Налаштування Профілю",
+    "profileSettingsDescription": "Керуйте інформацією вашого профілю користувача.",
+    "notificationSettingsTitle": "Сповіщення",
+    "notificationSettingsDescription": "Налаштуйте параметри сповіщень.",
+    "comingSoon": "Більше налаштувань незабаром."
+  }
+}
