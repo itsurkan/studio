@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* Body classes related to fonts were removed in a previous step to address hydration. */}
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Toaster />
       </body>
