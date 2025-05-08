@@ -81,12 +81,12 @@ export default function RagPage() {
   };
 
   const handleDownloadResult = () => {
-    if (ragResult) {
+    if (ragResult && selectedFile) {
       const blob = new Blob([ragResult], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `GnosisAI_Result_${selectedFile?.name || 'output'}.txt`;
+      a.download = `GnosisAI_Result_${selectedFile.name.replace(/\.[^/.]+$/, "") || 'output'}.txt`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
