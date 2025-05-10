@@ -222,7 +222,7 @@ export default function RagPage() {
               </ScrollArea>
             </CardContent>
             
-            <CardFooter className="p-2 sm:p-4 border-t bg-background">
+            <CardFooter className="p-2 sm:p-4 border-t bg-background flex flex-col items-center">
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
                 className="flex items-center w-full space-x-2"
@@ -251,7 +251,7 @@ export default function RagPage() {
                   <span className="sr-only">{t('sendMessage')}</span>
                 </Button>
               </form>
-              <div className="text-xs text-muted-foreground text-center mt-1 w-full hidden sm:block">
+              <div className="text-xs text-muted-foreground text-center mt-2 w-full">
                 {commonT('modelLabel', { modelName: "GPT 4.1"})} <BrainCircuit size={12} className="inline-block ml-1"/>
               </div>
             </CardFooter>
@@ -261,3 +261,4 @@ export default function RagPage() {
     </div>
   );
 }
+
