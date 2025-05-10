@@ -149,10 +149,19 @@
     "languageSettingsTitle": "Мова",
     "languageSettingsDescription": "Оберіть бажану мову відображення.",
     "currentLanguageHint": "Інтерфейс додатка оновиться до вибраної мови.",
+    "themeSettingsTitle": "Тема",
+    "themeSettingsDescription": "Оберіть бажану тему для додатка.",
+    "currentThemeHint": "Додаток оновить тему на обрану (Світла, Темна або Системна).",
     "profileSettingsTitle": "Налаштування Профілю",
     "profileSettingsDescription": "Керуйте інформацією вашого профілю користувача.",
     "notificationSettingsTitle": "Сповіщення",
     "notificationSettingsDescription": "Налаштуйте параметри сповіщень.",
     "comingSoon": "Більше налаштувань незабаром."
+  },
+  "ThemeSwitcher": {
+    "light": "Світла",
+    "dark": "Темна",
+    "system": "Системна",
+    "toggleTheme": "Перемкнути тему"
   }
 }

@@ -149,10 +149,19 @@
     "languageSettingsTitle": "Idioma",
     "languageSettingsDescription": "Elige tu idioma de visualización preferido.",
     "currentLanguageHint": "La interfaz de la aplicación se actualizará al idioma seleccionado.",
+    "themeSettingsTitle": "Tema",
+    "themeSettingsDescription": "Elige tu tema de aplicación preferido.",
+    "currentThemeHint": "La aplicación se actualizará al tema seleccionado (Claro, Oscuro o predeterminado del Sistema).",
     "profileSettingsTitle": "Configuración del Perfil",
     "profileSettingsDescription": "Administra la información de tu perfil de usuario.",
     "notificationSettingsTitle": "Notificaciones",
     "notificationSettingsDescription": "Configura tus preferencias de notificación.",
     "comingSoon": "Más configuraciones próximamente."
+  },
+  "ThemeSwitcher": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema",
+    "toggleTheme": "Alternar tema"
   }
 }

@@ -2,9 +2,10 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { ThemeSwitcher } from "@/components/settings/theme-switcher";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
-import { Cog } from "lucide-react";
+import { Cog, Palette } from "lucide-react"; // Added Palette for theme
 
 export default function SettingsPage() {
   const t = useTranslations('SettingsPage');
@@ -29,6 +30,22 @@ export default function SettingsPage() {
             <LanguageSwitcher />
             <p className="text-sm text-muted-foreground">
               {t('currentLanguageHint')}
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-md">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+                <Palette className="w-5 h-5 mr-2 text-primary" />
+                {t('themeSettingsTitle')}
+            </CardTitle>
+            <CardDescription>{t('themeSettingsDescription')}</CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col items-start space-y-4">
+            <ThemeSwitcher />
+             <p className="text-sm text-muted-foreground">
+              {t('currentThemeHint')}
             </p>
           </CardContent>
         </Card>

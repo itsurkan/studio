@@ -149,10 +149,19 @@
     "languageSettingsTitle": "Language",
     "languageSettingsDescription": "Choose your preferred display language.",
     "currentLanguageHint": "The application interface will update to the selected language.",
+    "themeSettingsTitle": "Theme",
+    "themeSettingsDescription": "Choose your preferred application theme.",
+    "currentThemeHint": "The application will update to the selected theme (Light, Dark, or System default).",
     "profileSettingsTitle": "Profile Settings",
     "profileSettingsDescription": "Manage your user profile information.",
     "notificationSettingsTitle": "Notifications",
     "notificationSettingsDescription": "Configure your notification preferences.",
     "comingSoon": "More settings coming soon."
+  },
+  "ThemeSwitcher": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "toggleTheme": "Toggle theme"
   }
 }
