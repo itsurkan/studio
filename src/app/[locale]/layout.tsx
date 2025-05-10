@@ -1,11 +1,10 @@
-
 import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from 'next-intl';
-import {notFound} from 'next/navigation';
-import "../globals.css"; // Adjusted path
-import { AppProviders } from "@/contexts/app-providers"; 
+import { notFound } from 'next/navigation';
+import "../globals.css";
+import { AppProviders } from "@/contexts/app-providers";
 import { Toaster } from "@/components/ui/toaster";
-import { locales } from "@/i18n"; // Import locales
+import { locales } from "@/i18n";
 
 export const metadata: Metadata = {
   title: "Gnosis.AI",
@@ -17,22 +16,21 @@ interface RootLayoutProps {
   params: { locale: string };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params: { locale },
 }: Readonly<RootLayoutProps>) {
-  // Validate that the incoming `locale` parameter is valid
-  if (!locales.includes(locale)) {
+  if (!locale || !locales.includes(locale)) {
     notFound();
   }
 
-  const messages = useMessages();
+  const messages = await useMessages();
 
   return (
     <html lang={locale} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <AppProviders> 
+          <AppProviders>
             {children}
             <Toaster />
           </AppProviders>
