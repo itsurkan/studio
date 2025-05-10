@@ -43,24 +43,24 @@
     --header-height: 4rem; /* Assuming header is h-16 */
   }
   .dark {
-    --background: 220 10% 10%; /* Dark Grey */
+    --background: 220 10% 5%; /* Very dark page background */
     --foreground: 210 40% 98%; /* Light Grey text */
-    --card: 220 10% 12%; /* Slightly lighter dark grey */
+    --card: 220 10% 8%; /* Chat Card background, dark */
     --card-foreground: 210 40% 98%;
     --popover: 220 10% 10%;
     --popover-foreground: 210 40% 98%;
-    --primary: 207 68% 58%; /* Brighter Blue for dark mode */
+    --primary: 207 68% 58%; /* Accent Blue for dark mode */
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 10% 18%; /* Darker secondary */
-    --secondary-foreground: 210 40% 98%;
-    --muted: 220 10% 22%;
-    --muted-foreground: 210 40% 70%;
+    --secondary: 220 10% 15%; /* User bubble BG dark mode, medium-dark grey */
+    --secondary-foreground: 210 40% 98%; /* User bubble Text dark mode, light grey/white */
+    --muted: 220 10% 12%; /* AI bubble BG & AI avatar BG & Chat Footer BG dark mode, dark grey */
+    --muted-foreground: 210 40% 70%; /* Muted text grey */
     --accent: 145 63% 55%; /* Brighter Green for dark mode */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 220 10% 28%;
-    --input: 220 10% 20%;
+    --border: 220 10% 18%; /* Slightly lighter border for contrast on dark elements */
+    --input: 220 10% 18%; /* Border for input; Textarea component uses --background for its BG */
     --ring: 207 68% 58%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;

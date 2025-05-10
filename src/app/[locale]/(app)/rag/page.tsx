@@ -294,7 +294,7 @@ export default function RagPage() {
         </div>
 
         <div className="md:col-span-2 flex flex-col flex-grow min-h-0">
-          <Card className="shadow-lg flex-grow flex flex-col h-full">
+          <Card className="shadow-lg flex-grow flex flex-col h-full bg-card"> {/* Ensured card uses card background */}
             <CardHeader>
               <CardTitle>
                 {selectedFile ? t('chatWithFile', {fileName: selectedFile.name}) : t('generalChatTitle')}
@@ -318,14 +318,20 @@ export default function RagPage() {
                     <div className={cn("flex items-end max-w-[75%]", msg.role === 'user' ? 'flex-row-reverse' : 'flex-row')}>
                       <Avatar className={cn("h-8 w-8", msg.role === 'user' ? 'ml-2' : 'mr-2')}>
                         <AvatarImage src={msg.role === 'ai' ? undefined : msg.avatar} />
-                        <AvatarFallback className={cn(msg.role === 'ai' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground')}>
+                        <AvatarFallback className={cn(
+                          msg.role === 'ai' 
+                            ? 'bg-primary text-primary-foreground dark:bg-muted dark:text-foreground' 
+                            : 'bg-secondary text-secondary-foreground'
+                        )}>
                           {msg.role === 'ai' ? <BrainCircuit size={18}/> : <User size={18}/>}
                         </AvatarFallback>
                       </Avatar>
                       <div 
                         className={cn(
                           "p-3 rounded-lg shadow-md", 
-                          msg.role === 'user' ? 'bg-primary text-primary-foreground rounded-br-none' : 'bg-muted rounded-bl-none',
+                          msg.role === 'user' 
+                            ? 'bg-primary text-primary-foreground dark:bg-secondary dark:text-secondary-foreground rounded-br-none' 
+                            : 'bg-muted dark:bg-muted dark:text-foreground rounded-bl-none',
                         )}
                       >
                         {msg.isLoading ? (
@@ -352,7 +358,7 @@ export default function RagPage() {
               </ScrollArea>
             </CardContent>
             
-            <CardFooter className="p-2 sm:p-4 border-t bg-background flex flex-col items-center">
+            <CardFooter className="p-2 sm:p-4 border-t dark:bg-muted flex flex-col items-center"> {/* Adjusted footer bg for dark mode */}
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
                 className="flex items-center w-full space-x-2"
