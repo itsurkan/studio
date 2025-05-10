@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ChevronDown } from "lucide-react"; // BrainCircuit removed
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
@@ -25,22 +25,29 @@ interface LLMModel {
   dotColorClass?: string;
 }
 
-// Updated list of available models including OpenRouter options
+// Updated list of available models
 const availableModels: LLMModel[] = [
-  { id: "openrouter/o4-mini-high", name: "o4-mini-high", isPro: false, dotColorClass: "bg-muted-foreground" },
-  { id: "openrouter/claude-3.7-thinking", name: "Claude 3.7 Thinking", isPro: false, dotColorClass: "bg-muted-foreground" },
+  // Existing models, now marked as Pro
+  { id: "openrouter/o4-mini-high", name: "o4-mini-high", isPro: true, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/claude-3.7-thinking", name: "Claude 3.7 Thinking", isPro: true, dotColorClass: "bg-muted-foreground" },
   { id: "openrouter/gpt-4.5-turbo", name: "GPT 4.5", isPro: true, dotColorClass: "bg-muted-foreground" },
   { id: "openrouter/gemini-2.5-pro", name: "Gemini 2.5 Pro", isPro: true, dotColorClass: "bg-muted-foreground" },
   { id: "openrouter/grok-3", name: "Grok 3", isPro: true, dotColorClass: "bg-muted-foreground" },
-  { id: "openrouter/claude-3.7", name: "Claude 3.7", isPro: false, dotColorClass: "bg-muted-foreground" },
-  { id: "openrouter/gpt-4.1-preview", name: "GPT 4.1", isPro: false, dotColorClass: "bg-muted-foreground" },
-  { id: "openrouter/grok-3-mini", name: "Grok 3 Mini", isPro: false, dotColorClass: "bg-yellow-400" },
+  { id: "openrouter/claude-3.7", name: "Claude 3.7", isPro: true, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/gpt-4.1-preview", name: "GPT 4.1", isPro: true, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/grok-3-mini", name: "Grok 3 Mini", isPro: true, dotColorClass: "bg-yellow-400" },
   { id: "googleai/gemini-1.5-pro-latest", name: "Gemini 1.5 Pro", isPro: true, dotColorClass: "bg-primary" },
-  { id: "googleai/gemini-1.5-flash-latest", name: "Gemini 1.5 Flash", isPro: false, dotColorClass: "bg-green-500" },
-  { id: "googleai/gemini-2.0-flash", name: "Gemini 2.0 Flash", isPro: false, dotColorClass: "bg-muted-foreground" },
+  { id: "googleai/gemini-1.5-flash-latest", name: "Gemini 1.5 Flash", isPro: true, dotColorClass: "bg-green-500" },
+  { id: "googleai/gemini-2.0-flash", name: "Gemini 2.0 Flash", isPro: true, dotColorClass: "bg-muted-foreground" }, // Default model, now also Pro
+
+  // New free OpenRouter models
+  { id: "openrouter/nous-hermes-2-mixtral-8x7b-dpo", name: "Nous Hermes 2 Mixtral DPO", isPro: false, dotColorClass: "bg-sky-500" },
+  { id: "openrouter/mistral-7b-instruct-v0.2", name: "Mistral 7B Instruct", isPro: false, dotColorClass: "bg-sky-500" },
+  { id: "openrouter/openchat-3.5", name: "OpenChat 3.5", isPro: false, dotColorClass: "bg-sky-500" },
+  { id: "openrouter/huggingfaceh4/zephyr-7b-beta", name: "Zephyr 7B Beta", isPro: false, dotColorClass: "bg-sky-500" },
 ];
 
-export const defaultModelId = "googleai/gemini-2.0-flash"; // Default model remains unchanged
+export const defaultModelId = "googleai/gemini-2.0-flash"; 
 
 interface ModelSelectorProps {
   selectedModelId: string;
@@ -84,6 +91,7 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
         >
           <span className={cn("w-2 h-2 rounded-full mr-1.5 flex-shrink-0", currentSelectedModel.dotColorClass)} />
           {commonT('modelLabelShort', { modelName: currentSelectedModel.name })}
+          {currentSelectedModel.isPro && <Badge variant="outline" className="ml-1.5 text-xs px-1 py-0.5 bg-primary/10 text-primary border-primary/30 font-medium h-auto leading-tight">PRO</Badge>}
           <ChevronDown size={14} className="ml-1 opacity-70" />
         </Button>
       </DropdownMenuTrigger>
