@@ -1,3 +1,4 @@
+
 "use client";
 
 import type React from "react";
@@ -173,7 +174,7 @@ export default function RagPage() {
             <CardContent className="flex-grow overflow-hidden p-0">
               <ScrollArea ref={scrollAreaRef} className="h-full p-4 space-y-4">
                 {chatMessages.length === 0 && !selectedFile && (
-                  <Alert variant="default" className="m-4">
+                  <Alert variant="default"> {/* Removed m-4 */}
                     <Info className="h-4 w-4" />
                     <AlertTitle>{t('selectAFileAlertTitle')}</AlertTitle>
                     <AlertDescription>
@@ -265,3 +266,4 @@ export default function RagPage() {
     </div>
   );
 }
+
