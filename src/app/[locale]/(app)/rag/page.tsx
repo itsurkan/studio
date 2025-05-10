@@ -1,3 +1,4 @@
+
 "use client";
 
 import type React from "react";
@@ -31,6 +32,8 @@ interface ChatMessageItem {
   modelUsed?: string;
 }
 
+const SPEECH_PAUSE_TIMEOUT = 3000; // 3 seconds
+
 export default function RagPage() {
   const t = useTranslations('RagPage');
   const commonT = useTranslations('Common');
@@ -45,12 +48,14 @@ export default function RagPage() {
   const { files: allUploadedFiles } = useFiles();
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   
   const [isRecording, setIsRecording] = useState(false);
   const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
   const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null);
   const locale = useLocale();
   const initialQueryForSessionRef = useRef<string>("");
+  const speechPauseTimerRef = useRef<NodeJS.Timeout | null>(null);
 
 
   const selectedFile: AppFile | undefined | null = selectedFileId ? allUploadedFiles.find(file => file.id === selectedFileId) : null;
@@ -107,8 +112,18 @@ export default function RagPage() {
         speechRecognitionRef.current.onend = null;
         speechRecognitionRef.current = null; 
       }
+      if (speechPauseTimerRef.current) {
+        clearTimeout(speechPauseTimerRef.current);
+      }
     };
   }, []);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto"; // Reset height to recalculate
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, [query]);
 
 
   const scrollToBottom = useCallback(() => {
@@ -141,8 +156,8 @@ export default function RagPage() {
     };
     setChatMessages(prev => [...prev, userMessage]);
     const currentQuery = query;
-    setQuery(""); // Clear query for next message, voice input will repopulate if active
-    initialQueryForSessionRef.current = ""; // Reset for next potential voice input
+    setQuery(""); 
+    initialQueryForSessionRef.current = ""; 
     setIsLoading(true);
     setError(null);
     
@@ -199,6 +214,17 @@ export default function RagPage() {
     }
   };
 
+  const stopRecording = () => {
+    if (speechRecognitionRef.current) {
+      speechRecognitionRef.current.stop();
+    }
+    if (speechPauseTimerRef.current) {
+      clearTimeout(speechPauseTimerRef.current);
+      speechPauseTimerRef.current = null;
+    }
+    // isRecording will be set to false in onend
+  };
+
   const handleToggleRecording = () => {
     if (hasMicPermission === false) {
       toast({ 
@@ -221,18 +247,18 @@ export default function RagPage() {
     if (!SpeechRecognitionAPI) return;
 
     if (isRecording) {
-      speechRecognitionRef.current?.stop();
-      // isRecording will be set to false in onend
+      stopRecording();
     } else {
+      // Preserve existing typed text or start new line if not empty
       let currentQueryValue = query;
       if (currentQueryValue.trim() && !currentQueryValue.endsWith('\n')) {
         initialQueryForSessionRef.current = currentQueryValue + '\n';
-      } else if (!currentQueryValue.trim()) {
+      } else if (currentQueryValue.trim() === '') { // if query is empty or only whitespace
         initialQueryForSessionRef.current = '';
-      } else {
+      } else { // query has content and might end with \n
         initialQueryForSessionRef.current = currentQueryValue;
       }
-      setQuery(initialQueryForSessionRef.current); // Update query to reflect base for this session
+      setQuery(initialQueryForSessionRef.current); 
 
       const recognition = new SpeechRecognitionAPI();
       speechRecognitionRef.current = recognition;
@@ -243,30 +269,57 @@ export default function RagPage() {
       else if (locale === 'es') speechLang = 'es-ES';
       recognition.lang = speechLang;
       
-      recognition.continuous = true; // Continuous recognition for pauses
-      recognition.interimResults = true; // Get interim results for live feedback
+      recognition.continuous = true; 
+      recognition.interimResults = true; 
 
       recognition.onstart = () => {
         setIsRecording(true);
       };
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
-        let sessionTranscript = "";
-        for (let i = 0; i < event.results.length; i++) {
-          sessionTranscript += event.results[i][0].transcript;
+        if (speechPauseTimerRef.current) {
+          clearTimeout(speechPauseTimerRef.current);
         }
-        setQuery(initialQueryForSessionRef.current + sessionTranscript);
+
+        let sessionTranscript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) { // Process only new results
+          if (event.results[i].isFinal) {
+            sessionTranscript += event.results[i][0].transcript;
+          } else {
+            sessionTranscript += event.results[i][0].transcript;
+          }
+        }
+        
+        setQuery(prevQuery => {
+            // If the session transcript comes after a final result, add a space or handle as needed
+            // For simplicity, just appending. For more robust handling, might need to track final segments.
+            // If initialQueryForSessionRef.current already has the prefix, just add the new transcript
+            if (prevQuery.startsWith(initialQueryForSessionRef.current)) {
+                 return initialQueryForSessionRef.current + sessionTranscript;
+            }
+            return prevQuery + sessionTranscript; // Fallback, less likely
+        });
+
+
+        speechPauseTimerRef.current = setTimeout(() => {
+          stopRecording();
+        }, SPEECH_PAUSE_TIMEOUT);
+        
         scrollToBottom();
       };
 
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error("Speech recognition error", event.error);
         toast({ title: t('speechRecognitionErrorTitle'), description: event.error, variant: "destructive" });
-        // setIsRecording(false); // onend will handle this
+        // isRecording(false) will be handled by onend
       };
 
       recognition.onend = () => {
         setIsRecording(false);
+        if (speechPauseTimerRef.current) {
+          clearTimeout(speechPauseTimerRef.current);
+          speechPauseTimerRef.current = null;
+        }
         // The query state should be up-to-date from the last onresult
       };
 
@@ -275,7 +328,7 @@ export default function RagPage() {
       } catch (e) {
         console.error("Error starting speech recognition:", e);
         toast({ title: t('speechRecognitionErrorTitle'), description: (e as Error).message, variant: "destructive" });
-        setIsRecording(false); // Ensure state is correct if start fails
+        setIsRecording(false); 
       }
     }
   };
@@ -318,7 +371,7 @@ export default function RagPage() {
             
             <CardContent className="flex-grow overflow-hidden p-0">
               <ScrollArea ref={scrollAreaRef} className="h-full p-4 space-y-4">
-                {chatMessages.length === 0 && !isLoading && ( // Added !isLoading to prevent flash of this message
+                {chatMessages.length === 0 && !isLoading && ( 
                   <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 text-center">
                     <BrainCircuit size={48} className="mb-2"/>
                     {selectedFile ? (
@@ -379,6 +432,7 @@ export default function RagPage() {
                 className="flex items-end w-full space-x-2"
               >
                 <Textarea
+                  ref={textareaRef}
                   placeholder={selectedFile ? t('typeYourMessagePlaceholder', {fileName: selectedFile.name}) : t('typeYourGeneralMessagePlaceholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -390,7 +444,7 @@ export default function RagPage() {
                   }}
                   rows={1}
                   className="flex-grow resize-none min-h-[40px] text-sm sm:text-base" 
-                  disabled={isLoading && !isRecording} // Allow typing if recording, even if main query is loading
+                  disabled={isLoading && !isRecording} 
                   aria-label={t('queryPlaceholder')}
                 />
                 <Button 
