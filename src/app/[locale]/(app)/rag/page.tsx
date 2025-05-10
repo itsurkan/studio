@@ -120,7 +120,11 @@ export default function RagPage() {
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"; // Reset height to recalculate
+      // Temporarily remove vertical scroll to avoid flash of scrollbar during recalculation
+      textareaRef.current.style.overflowY = "hidden";
+      // Reset height to 'auto' to get the correct scrollHeight for the current content
+      textareaRef.current.style.height = "auto";
+      // Set the new height based on scrollHeight
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [query]);
@@ -477,5 +481,6 @@ export default function RagPage() {
     </div>
   );
 }
+
 
 
