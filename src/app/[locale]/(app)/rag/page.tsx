@@ -50,6 +50,8 @@ export default function RagPage() {
   const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
   const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null);
   const locale = useLocale();
+  const initialQueryForSessionRef = useRef<string>("");
+
 
   const selectedFile: AppFile | undefined | null = selectedFileId ? allUploadedFiles.find(file => file.id === selectedFileId) : null;
 
@@ -103,6 +105,7 @@ export default function RagPage() {
         speechRecognitionRef.current.onerror = null;
         speechRecognitionRef.current.onstart = null;
         speechRecognitionRef.current.onend = null;
+        speechRecognitionRef.current = null; 
       }
     };
   }, []);
@@ -138,7 +141,8 @@ export default function RagPage() {
     };
     setChatMessages(prev => [...prev, userMessage]);
     const currentQuery = query;
-    setQuery("");
+    setQuery(""); // Clear query for next message, voice input will repopulate if active
+    initialQueryForSessionRef.current = ""; // Reset for next potential voice input
     setIsLoading(true);
     setError(null);
     
@@ -207,7 +211,7 @@ export default function RagPage() {
     if (hasMicPermission === null) {
       toast({ 
         title: t('micAccessDeniedTitle'), 
-        description: t('micAccessDeniedDescription'), // Or a "please wait for permission"
+        description: t('micAccessDeniedDescription'),
         variant: "default" 
       });
       return;
@@ -218,9 +222,20 @@ export default function RagPage() {
 
     if (isRecording) {
       speechRecognitionRef.current?.stop();
-      setIsRecording(false); 
+      // isRecording will be set to false in onend
     } else {
+      let currentQueryValue = query;
+      if (currentQueryValue.trim() && !currentQueryValue.endsWith('\n')) {
+        initialQueryForSessionRef.current = currentQueryValue + '\n';
+      } else if (!currentQueryValue.trim()) {
+        initialQueryForSessionRef.current = '';
+      } else {
+        initialQueryForSessionRef.current = currentQueryValue;
+      }
+      setQuery(initialQueryForSessionRef.current); // Update query to reflect base for this session
+
       const recognition = new SpeechRecognitionAPI();
+      speechRecognitionRef.current = recognition;
       
       let speechLang = locale;
       if (locale === 'ua') speechLang = 'uk-UA';
@@ -228,38 +243,39 @@ export default function RagPage() {
       else if (locale === 'es') speechLang = 'es-ES';
       recognition.lang = speechLang;
       
-      recognition.interimResults = true;
-      recognition.continuous = false; 
+      recognition.continuous = true; // Continuous recognition for pauses
+      recognition.interimResults = true; // Get interim results for live feedback
 
       recognition.onstart = () => {
         setIsRecording(true);
       };
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
-        const fullTranscript = Array.from(event.results)
-          .map(result => result[0])
-          .map(result => result.transcript)
-          .join('');
-        setQuery(fullTranscript);
+        let sessionTranscript = "";
+        for (let i = 0; i < event.results.length; i++) {
+          sessionTranscript += event.results[i][0].transcript;
+        }
+        setQuery(initialQueryForSessionRef.current + sessionTranscript);
+        scrollToBottom();
       };
 
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error("Speech recognition error", event.error);
         toast({ title: t('speechRecognitionErrorTitle'), description: event.error, variant: "destructive" });
-        setIsRecording(false);
+        // setIsRecording(false); // onend will handle this
       };
 
       recognition.onend = () => {
         setIsRecording(false);
+        // The query state should be up-to-date from the last onresult
       };
 
       try {
         recognition.start();
-        speechRecognitionRef.current = recognition;
       } catch (e) {
         console.error("Error starting speech recognition:", e);
         toast({ title: t('speechRecognitionErrorTitle'), description: (e as Error).message, variant: "destructive" });
-        setIsRecording(false);
+        setIsRecording(false); // Ensure state is correct if start fails
       }
     }
   };
@@ -302,7 +318,7 @@ export default function RagPage() {
             
             <CardContent className="flex-grow overflow-hidden p-0">
               <ScrollArea ref={scrollAreaRef} className="h-full p-4 space-y-4">
-                {chatMessages.length === 0 && (
+                {chatMessages.length === 0 && !isLoading && ( // Added !isLoading to prevent flash of this message
                   <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 text-center">
                     <BrainCircuit size={48} className="mb-2"/>
                     {selectedFile ? (
@@ -360,10 +376,10 @@ export default function RagPage() {
             <CardFooter className="p-2 sm:p-4 border-t dark:bg-muted flex flex-col items-center"> {/* Adjusted footer bg for dark mode */}
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
-                className="flex items-end w-full space-x-2" // Changed items-center to items-end
+                className="flex items-end w-full space-x-2"
               >
                 <Textarea
-                  placeholder={selectedFile ? t('typeYourMessagePlaceholder') : t('typeYourGeneralMessagePlaceholder')}
+                  placeholder={selectedFile ? t('typeYourMessagePlaceholder', {fileName: selectedFile.name}) : t('typeYourGeneralMessagePlaceholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => {
@@ -373,8 +389,8 @@ export default function RagPage() {
                     }
                   }}
                   rows={1}
-                  className="flex-grow resize-none min-h-[40px] text-sm sm:text-base" // Removed max-h-[120px]
-                  disabled={isLoading}
+                  className="flex-grow resize-none min-h-[40px] text-sm sm:text-base" 
+                  disabled={isLoading && !isRecording} // Allow typing if recording, even if main query is loading
                   aria-label={t('queryPlaceholder')}
                 />
                 <Button 
@@ -407,3 +423,4 @@ export default function RagPage() {
     </div>
   );
 }
+
