@@ -121,9 +121,9 @@ export default function RagPage() {
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.overflowY = "hidden";
-      textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      textareaRef.current.style.overflowY = "hidden"; // Hide scrollbar initially
+      textareaRef.current.style.height = "auto"; // Reset height
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set to scroll height
     }
   }, [query]);
 
@@ -154,10 +154,12 @@ export default function RagPage() {
       avatar: user?.photoURL || undefined,
       name: user?.displayName || commonT('you'),
     };
-    setChatMessages(prev => [...prev, userMessage]);
+    
     const currentQuery = query;
     setQuery(""); 
     initialQueryForSessionRef.current = ""; 
+    
+    setChatMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
     setError(null);
     
@@ -171,7 +173,6 @@ export default function RagPage() {
       name: "Gnosis.AI",
       modelUsed: currentModelName
     }]);
-    // scrollToBottom(); // Removed, will be handled by useEffect on chatMessages change
 
     try {
       const ragInput: RagBasedQueryInput = {
@@ -210,7 +211,6 @@ export default function RagPage() {
       });
     } finally {
       setIsLoading(false);
-      // scrollToBottom(); // Removed, will be handled by useEffect on chatMessages change
     }
   };
 
@@ -249,7 +249,7 @@ export default function RagPage() {
       stopRecording();
     } else {
       let currentQueryValue = query;
-      if (currentQueryValue.trim() && !currentQueryValue.endsWith('\n')) {
+      if (currentQueryValue.trim() && !currentQueryValue.endsWith('\n') && !currentQueryValue.endsWith(' ')) {
         initialQueryForSessionRef.current = currentQueryValue + '\n';
       } else if (currentQueryValue.trim() === '') {
         initialQueryForSessionRef.current = '';
@@ -300,7 +300,6 @@ export default function RagPage() {
           stopRecording();
         }, SPEECH_PAUSE_TIMEOUT);
         
-        // scrollToBottom(); // Removed, will be handled by useEffect
       };
 
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
@@ -313,6 +312,9 @@ export default function RagPage() {
         if (speechPauseTimerRef.current) {
           clearTimeout(speechPauseTimerRef.current);
           speechPauseTimerRef.current = null;
+        }
+        if (textareaRef.current) { // Ensure focus to allow typing after voice input
+          textareaRef.current.focus();
         }
       };
 
