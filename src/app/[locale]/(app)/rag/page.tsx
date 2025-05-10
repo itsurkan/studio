@@ -1,4 +1,3 @@
-
 "use client";
 
 import type React from "react";
@@ -133,15 +132,16 @@ export default function RagPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 h-[calc(100vh-var(--header-height,8rem))]"> {/* Adjust header height var */}
+    <div className="container mx-auto py-8 h-[calc(100vh-var(--header-height,8rem))] flex flex-col">
       <div className="mb-4">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('title')}</h1>
         <p className="text-muted-foreground">{selectedFile ? t('chattingWith', {fileName: selectedFile.name}) : t('description')}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[calc(100%-6rem)]">
-        <div className="md:col-span-1 h-full">
-          <Card className="shadow-md h-full flex flex-col sticky top-24"> {/* Ensure stickiness */}
+      <div className="flex flex-col md:grid md:grid-cols-3 gap-6 flex-grow min-h-0"> {/* Changed: Main layout container */}
+        {/* File List Section */}
+        <div className="md:col-span-1 flex-shrink-0 md:h-full">
+          <Card className="shadow-md flex flex-col md:sticky md:top-24 h-auto max-h-[40vh] md:h-full md:max-h-none"> {/* Changed: Card styling for responsiveness */}
             <CardHeader>
               <CardTitle>{t('selectFileTitle')}</CardTitle>
               <CardDescription>{t('selectFileDescription')}</CardDescription>
@@ -151,14 +151,15 @@ export default function RagPage() {
                 onFileSelect={setSelectedFileId} 
                 selectedFileId={selectedFileId} 
                 showActions={false}
-                maxHeight="max-h-full" // Adjust based on parent height
+                maxHeight="max-h-full" 
               />
             </CardContent>
           </Card>
         </div>
 
-        <div className="md:col-span-2 h-full flex flex-col">
-          <Card className="shadow-lg flex-grow flex flex-col">
+        {/* Chat Interface Section */}
+        <div className="md:col-span-2 flex flex-col flex-grow min-h-0"> {/* Changed: Chat section wrapper */}
+          <Card className="shadow-lg flex-grow flex flex-col h-full"> {/* h-full helps ensure it fills the parent on desktop when parent is grid cell */}
             <CardHeader>
               <CardTitle>
                 {selectedFile ? t('chatWithFile', {fileName: selectedFile.name}) : t('chatInterfaceTitle')}
