@@ -55,7 +55,9 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       } catch (error) {
         console.error("Google Sign-In Redirect Error:", error);
         const errorMessage = error instanceof Error ? error.message : 'Failed to sign in with Google after redirect.';
-        if ((error as any).code !== 'auth/no-user-found') { // Don't toast if it's just no redirect pending
+        const errorCode = (error as any).code;
+        // Avoid toasting "auth/no-user-found" or "auth/no-redirect-operation" which are normal if no redirect was pending
+        if (errorCode !== 'auth/no-user-found' && errorCode !== 'auth/no-redirect-operation') {
             toast({
                 title: t('loginFailedTitle'),
                 description: errorMessage,
@@ -72,10 +74,18 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
 
   const signInWithGoogle = useCallback(async () => {
     setLoading(true);
+    console.log(
+      "Attempting Google Sign-In via redirect. " +
+      "If you see 'accounts.google.com refused to connect', please ensure: \n" +
+      "1. Your current application domain (e.g., from browser URL) is listed in Firebase Console > Authentication > Settings > Authorized domains.\n" +
+      "2. The 'Identity Toolkit API' is enabled in your Google Cloud Project.\n" +
+      "3. API key restrictions (if any) allow your domain."
+    );
     try {
       const provider = new GoogleAuthProvider();
       await signInWithRedirect(auth, provider);
-      // The user will be redirected, and the result handled by the useEffect hook above.
+      // User will be redirected. Result is handled by the useEffect hook above.
+      // setLoading(false) is not needed here as the page will navigate away.
     } catch (error) {
       console.error("Google Sign-In Error (initiating redirect):", error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to initiate Google Sign-In.';
@@ -84,7 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         description: errorMessage,
         variant: 'destructive'
       });
-      setLoading(false);
+      setLoading(false); // Set loading false only if initiating redirect fails
     }
   }, [toast, t]);
 
