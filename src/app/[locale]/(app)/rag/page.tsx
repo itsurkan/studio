@@ -443,7 +443,7 @@ export default function RagPage() {
                     }
                   }}
                   rows={1}
-                  className="flex-grow resize-none min-h-[40px] text-sm sm:text-base" 
+                  className="flex-grow resize-none min-h-[40px] text-sm sm:text-base"
                   disabled={isLoading && !isRecording} 
                   aria-label={t('queryPlaceholder')}
                 />
@@ -477,4 +477,5 @@ export default function RagPage() {
     </div>
   );
 }
+
 
