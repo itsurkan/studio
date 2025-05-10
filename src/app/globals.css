@@ -39,6 +39,8 @@
     --sidebar-accent-foreground: 207 68% 52%; /* Blue text on hover */
     --sidebar-border: 210 20% 88%; /* Border color for sidebar elements */
     --sidebar-ring: 207 68% 52%; /* Focus ring color */
+
+    --header-height: 4rem; /* Assuming header is h-16 */
   }
   .dark {
     --background: 220 10% 10%; /* Dark Grey */

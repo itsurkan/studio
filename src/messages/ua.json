@@ -70,10 +70,11 @@
     "removeFile": "Видалити {fileName}"
   },
   "RagPage": {
-    "title": "Запитай свої дані (RAG)",
-    "description": "Отримуйте відповіді та резюме з вибраного документа.",
+    "title": "Чат з Вашими Даними",
+    "description": "Виберіть файл і почніть ставити запитання.",
+    "chattingWith": "Чат з: {fileName}",
     "selectFileTitle": "Виберіть Файл",
-    "selectFileDescription": "Оберіть документ для запиту.",
+    "selectFileDescription": "Оберіть документ для взаємодії.",
     "askQuestionTitle": "Поставте Запитання або Запросіть Резюме",
     "askQuestionDescription": "Переконайтеся, що ви спочатку вибрали файл. Наприклад: \"Зроби резюме цього документа.\" або \"Які ключові фінансові показники?\"",
     "yourQueryLabel": "Ваш Запит",
@@ -85,7 +86,7 @@
     "getAnswer": "Отримати Відповідь",
     "errorTitle": "Помилка",
     "selectAFileAlertTitle": "Виберіть Файл",
-    "selectAFileAlertDescription": "Будь ласка, виберіть файл зі списку ліворуч, щоб почати ставити запитання.",
+    "selectAFileAlertDescription": "Будь ласка, виберіть файл зі списку ліворуч, щоб почати спілкування.",
     "aiResponseTitle": "Відповідь, Згенерована ШІ",
     "aiResponseForFile": "Для файлу: {fileName}",
     "copyResult": "Копіювати результат",
@@ -100,7 +101,14 @@
     "toastCopiedTitle": "Скопійовано!",
     "toastCopiedDescription": "Результат скопійовано до буфера обміну.",
     "toastCopyFailedTitle": "Помилка Копіювання",
-    "toastCopyFailedDescription": "Не вдалося скопіювати текст."
+    "toastCopyFailedDescription": "Не вдалося скопіювати текст.",
+    "chatInterfaceTitle": "Інтерфейс Чату",
+    "chatWithFile": "Чат з: {fileName}",
+    "startConversation": "Виберіть файл та поставте запитання, щоб розпочати розмову з {fileName}.",
+    "typeYourMessagePlaceholder": "Введіть ваше повідомлення...",
+    "selectFileToChatPlaceholder": "Виберіть файл, щоб почати чат",
+    "voiceInput": "Голосове введення (не реалізовано)",
+    "sendMessage": "Надіслати Повідомлення"
   },
   "SemanticSearchPage": {
     "title": "Семантичний Пошук",
@@ -163,5 +171,11 @@
     "dark": "Темна",
     "system": "Системна",
     "toggleTheme": "Перемкнути тему"
+  },
+  "Common": {
+    "you": "Ви",
+    "ai": "ШІ",
+    "modelLabel": "Модель: {modelName}"
   }
 }
+

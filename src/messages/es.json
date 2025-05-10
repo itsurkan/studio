@@ -70,10 +70,11 @@
     "removeFile": "Eliminar {fileName}"
   },
   "RagPage": {
-    "title": "Pregunta a tus Datos (RAG)",
-    "description": "Obtén respuestas y resúmenes de tu documento seleccionado.",
+    "title": "Chatea con tus Datos",
+    "description": "Selecciona un archivo y comienza a hacer preguntas.",
+    "chattingWith": "Chateando con: {fileName}",
     "selectFileTitle": "Selecciona un Archivo",
-    "selectFileDescription": "Elige un documento para consultar.",
+    "selectFileDescription": "Elige un documento para interactuar.",
     "askQuestionTitle": "Haz una Pregunta o Solicita un Resumen",
     "askQuestionDescription": "Asegúrate de haber seleccionado un archivo primero. Ejemplo: \"Resume este documento.\" o \"¿Cuáles son las cifras financieras clave?\"",
     "yourQueryLabel": "Tu Consulta",
@@ -85,7 +86,7 @@
     "getAnswer": "Obtener Respuesta",
     "errorTitle": "Error",
     "selectAFileAlertTitle": "Selecciona un Archivo",
-    "selectAFileAlertDescription": "Por favor, selecciona un archivo de la lista a la izquierda para comenzar a hacer preguntas.",
+    "selectAFileAlertDescription": "Por favor, selecciona un archivo de la lista a la izquierda para comenzar a chatear.",
     "aiResponseTitle": "Respuesta Generada por IA",
     "aiResponseForFile": "Para el archivo: {fileName}",
     "copyResult": "Copiar resultado",
@@ -100,7 +101,14 @@
     "toastCopiedTitle": "¡Copiado!",
     "toastCopiedDescription": "Resultado copiado al portapapeles.",
     "toastCopyFailedTitle": "Fallo al Copiar",
-    "toastCopyFailedDescription": "No se pudo copiar el texto."
+    "toastCopyFailedDescription": "No se pudo copiar el texto.",
+    "chatInterfaceTitle": "Interfaz de Chat",
+    "chatWithFile": "Chatear con: {fileName}",
+    "startConversation": "Selecciona un archivo y haz una pregunta para iniciar la conversación con {fileName}.",
+    "typeYourMessagePlaceholder": "Escribe tu mensaje...",
+    "selectFileToChatPlaceholder": "Selecciona un archivo para empezar a chatear",
+    "voiceInput": "Entrada de Voz (no implementado)",
+    "sendMessage": "Enviar Mensaje"
   },
   "SemanticSearchPage": {
     "title": "Búsqueda Semántica",
@@ -163,5 +171,11 @@
     "dark": "Oscuro",
     "system": "Sistema",
     "toggleTheme": "Alternar tema"
+  },
+  "Common": {
+    "you": "Tú",
+    "ai": "IA",
+    "modelLabel": "Modelo: {modelName}"
   }
 }
+
