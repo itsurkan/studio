@@ -35,6 +35,7 @@
     "intro": "Upload your documents, ask questions, and get intelligent summaries. Simplify your workflow and discover hidden knowledge.",
     "signInWithGoogle": "Sign In with Google",
     "loading": "Loading...",
+    "redirecting": "Redirecting...",
     "footer": "&copy; {year} Gnosis.AI. Secure and Intelligent."
   },
   "FileUploadForm": {

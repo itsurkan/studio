@@ -3,7 +3,7 @@
 
 import type { ReactNode } from 'react';
 import { createContext, useEffect, useState, useCallback } from 'react';
-import { type User, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut as firebaseSignOut } from 'firebase/auth';
+import { type User, onAuthStateChanged, signInWithRedirect, GoogleAuthProvider, signOut as firebaseSignOut, getRedirectResult } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from '@/navigation'; // Use localized router
@@ -38,17 +38,43 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     return () => unsubscribe();
   }, []);
 
+  // Handle redirect result
+  useEffect(() => {
+    const handleRedirect = async () => {
+      try {
+        setLoading(true);
+        const result = await getRedirectResult(auth);
+        if (result && result.user) {
+          setUser(result.user);
+          toast({ 
+            title: t('loginSuccessfulTitle'), 
+            description: t('loginSuccessfulDescription'), 
+            className: "bg-accent text-accent-foreground" 
+          });
+          router.push('/rag'); // Redirect to RAG page
+        }
+      } catch (error) {
+        console.error("Google Sign-In Redirect Error:", error);
+        const errorMessage = error instanceof Error ? error.message : 'Failed to process sign-in redirect.';
+        toast({ 
+          title: t('loginFailedTitle'), 
+          description: errorMessage, 
+          variant: 'destructive' 
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    handleRedirect();
+  }, [router, t, toast]);
+
   const signInWithGoogle = useCallback(async () => {
     setLoading(true);
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      toast({ 
-        title: t('loginSuccessfulTitle'), 
-        description: t('loginSuccessfulDescription'), 
-        className: "bg-accent text-accent-foreground" 
-      });
-      router.push('/dashboard');
+      // Using signInWithRedirect instead of signInWithPopup
+      await signInWithRedirect(auth, provider);
+      // No direct navigation here as getRedirectResult will handle it
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign in with Google.';
@@ -59,7 +85,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
       });
       setLoading(false);
     }
-  }, [toast, router, t]);
+  }, [toast, t]);
 
   const signOutUser = useCallback(async () => {
     setLoading(true);
@@ -89,3 +115,4 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
     </AuthContext.Provider>
   );
 }
+

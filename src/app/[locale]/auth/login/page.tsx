@@ -17,7 +17,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.push("/dashboard");
+      router.push("/rag"); // Changed from /dashboard to /rag
     }
   }, [user, loading, router]);
 
@@ -25,7 +25,11 @@ export default function LoginPage() {
     await signInWithGoogle();
   };
 
-  if (loading || (!loading && user)) {
+  // If loading, or if user is already logged in (and redirect hasn't happened yet), show loading.
+  // The redirect logic is now primarily handled by getRedirectResult in AuthProvider
+  // and the useEffect above for already authenticated users.
+  // We still want to show loading if signInWithGoogle has been initiated and is processing.
+  if (loading) { 
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
         <BrainCircuit className="w-16 h-16 text-primary animate-pulse mb-4" />
@@ -36,6 +40,21 @@ export default function LoginPage() {
       </div>
     );
   }
+  
+  // If user is already present and we are not loading, this page shouldn't be shown
+  // as the useEffect above should have redirected. But as a fallback/safety:
+  if (!loading && user) {
+     return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+        <BrainCircuit className="w-16 h-16 text-primary animate-pulse mb-4" />
+        <p className="text-muted-foreground flex items-center">
+          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+          {t('redirecting')} {/* Or some other appropriate message */}
+        </p>
+      </div>
+    );
+  }
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-background to-secondary/30 p-4">
@@ -68,3 +87,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

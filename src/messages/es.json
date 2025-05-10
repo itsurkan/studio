@@ -35,6 +35,7 @@
     "intro": "Sube tus documentos, haz preguntas y obtén resúmenes inteligentes. Simplifica tu flujo de trabajo y descubre conocimiento oculto.",
     "signInWithGoogle": "Iniciar Sesión con Google",
     "loading": "Cargando...",
+    "redirecting": "Redirigiendo...",
     "footer": "&copy; {year} Gnosis.AI. Seguro e Inteligente."
   },
   "FileUploadForm": {

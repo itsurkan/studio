@@ -15,7 +15,7 @@ export default function LandingRedirectPage() {
   useEffect(() => {
     if (!loading) { 
       if (user) {
-        router.replace('/dashboard');
+        router.replace('/rag'); // Changed from /dashboard to /rag
       } else {
         router.replace('/auth/login');
       }
@@ -32,3 +32,4 @@ export default function LandingRedirectPage() {
     </div>
   );
 }
+
