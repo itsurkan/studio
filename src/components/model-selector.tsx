@@ -27,7 +27,7 @@ interface LLMModel {
 
 // Updated list of available models
 const availableModels: LLMModel[] = [
-  // Existing models, now marked as Pro
+  // Existing PRO models
   { id: "openrouter/o4-mini-high", name: "o4-mini-high", isPro: true, dotColorClass: "bg-muted-foreground" },
   { id: "openrouter/claude-3.7-thinking", name: "Claude 3.7 Thinking", isPro: true, dotColorClass: "bg-muted-foreground" },
   { id: "openrouter/gpt-4.5-turbo", name: "GPT 4.5", isPro: true, dotColorClass: "bg-muted-foreground" },
@@ -38,13 +38,21 @@ const availableModels: LLMModel[] = [
   { id: "openrouter/grok-3-mini", name: "Grok 3 Mini", isPro: true, dotColorClass: "bg-yellow-400" },
   { id: "googleai/gemini-1.5-pro-latest", name: "Gemini 1.5 Pro", isPro: true, dotColorClass: "bg-primary" },
   { id: "googleai/gemini-1.5-flash-latest", name: "Gemini 1.5 Flash", isPro: true, dotColorClass: "bg-green-500" },
-  { id: "googleai/gemini-2.0-flash", name: "Gemini 2.0 Flash", isPro: true, dotColorClass: "bg-muted-foreground" }, // Default model, now also Pro
+  { id: "googleai/gemini-2.0-flash", name: "Gemini 2.0 Flash", isPro: true, dotColorClass: "bg-muted-foreground" }, // Default model
 
-  // New free OpenRouter models
+  // Existing free OpenRouter models
   { id: "openrouter/nous-hermes-2-mixtral-8x7b-dpo", name: "Nous Hermes 2 Mixtral DPO", isPro: false, dotColorClass: "bg-sky-500" },
   { id: "openrouter/mistral-7b-instruct-v0.2", name: "Mistral 7B Instruct", isPro: false, dotColorClass: "bg-sky-500" },
   { id: "openrouter/openchat-3.5", name: "OpenChat 3.5", isPro: false, dotColorClass: "bg-sky-500" },
   { id: "openrouter/huggingfaceh4/zephyr-7b-beta", name: "Zephyr 7B Beta", isPro: false, dotColorClass: "bg-sky-500" },
+
+  // New free OpenRouter models from user request
+  { id: "deepseek/deepseek-chat-v3-0324:free", name: "DeepSeek V3 0324", isPro: false, dotColorClass: "bg-teal-500" },
+  { id: "deepseek/deepseek-r1:free", name: "DeepSeek R1", isPro: false, dotColorClass: "bg-teal-500" },
+  { id: "google/gemini-2.0-flash-exp:free", name: "Gemini 2.0 Flash Experimental", isPro: false, dotColorClass: "bg-green-500" },
+  { id: "meta-llama/llama-4-maverick:free", name: "Llama 4 Maverick", isPro: false, dotColorClass: "bg-indigo-500" },
+  { id: "deepseek/deepseek-chat:free", name: "DeepSeek V3", isPro: false, dotColorClass: "bg-teal-500" },
+  { id: "qwen/qwen3-235b-a22b:free", name: "Qwen3 235B A22B", isPro: false, dotColorClass: "bg-purple-500" },
 ];
 
 export const defaultModelId = "googleai/gemini-2.0-flash"; 
