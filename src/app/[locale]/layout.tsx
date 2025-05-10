@@ -19,7 +19,7 @@ interface RootLayoutProps {
 
 export default function RootLayout({
   children,
-  params: { locale },
+  params: {  locale },
 }: Readonly<RootLayoutProps>) {
   // Validate that the incoming `locale` parameter is valid
   if (!locales.includes(locale)) {
