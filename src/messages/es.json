@@ -1,3 +1,4 @@
+
 {
   "AppHeader": {
     "title": "Gnosis.AI",
@@ -106,11 +107,19 @@
     "startConversationWithFile": "Haz una pregunta para iniciar la conversación sobre {fileName}.",
     "typeYourMessagePlaceholder": "Escribe tu mensaje sobre {fileName}...",
     "selectFileToChatPlaceholder": "Selecciona un archivo para empezar a chatear",
-    "voiceInput": "Entrada de Voz (no implementado)",
+    "voiceInput": "Entrada de Voz",
+    "stopVoiceInput": "Detener Entrada de Voz",
     "sendMessage": "Enviar Mensaje",
     "generalChatTitle": "Chat General",
     "startGeneralConversation": "Pregúntame cualquier cosa, o selecciona un archivo de la izquierda para chatear sobre su contenido.",
-    "typeYourGeneralMessagePlaceholder": "Escribe tu mensaje o haz una pregunta general..."
+    "typeYourGeneralMessagePlaceholder": "Escribe tu mensaje o haz una pregunta general...",
+    "micAccessDeniedTitle": "Acceso al Micrófono Denegado",
+    "micAccessDeniedDescription": "Por favor, habilita los permisos del micrófono en la configuración de tu navegador para usar la entrada de voz.",
+    "micAccessErrorTitle": "Error de Micrófono",
+    "speechRecognitionNotSupportedTitle": "Entrada de Voz No Soportada",
+    "speechRecognitionNotSupportedDescription": "Tu navegador no soporta el reconocimiento de voz.",
+    "speechRecognitionErrorTitle": "Error en Entrada de Voz",
+    "micPermissionOrSupportError": "Acceso al micrófono denegado o función no soportada por tu navegador."
   },
   "SemanticSearchPage": {
     "title": "Búsqueda Semántica",
@@ -184,3 +193,4 @@
     "selectModel": "Seleccionar Modelo"
   }
 }
+

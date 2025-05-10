@@ -1,3 +1,4 @@
+
 {
   "AppHeader": {
     "title": "Gnosis.AI",
@@ -106,11 +107,19 @@
     "startConversationWithFile": "Поставте запитання, щоб розпочати розмову про {fileName}.",
     "typeYourMessagePlaceholder": "Введіть ваше повідомлення про {fileName}...",
     "selectFileToChatPlaceholder": "Виберіть файл, щоб почати чат",
-    "voiceInput": "Голосове введення (не реалізовано)",
+    "voiceInput": "Голосове введення",
+    "stopVoiceInput": "Зупинити Голосове Введення",
     "sendMessage": "Надіслати Повідомлення",
     "generalChatTitle": "Загальний Чат",
     "startGeneralConversation": "Запитайте мене будь-що, або виберіть файл ліворуч, щоб поспілкуватися про його вміст.",
-    "typeYourGeneralMessagePlaceholder": "Введіть ваше повідомлення або загальне запитання..."
+    "typeYourGeneralMessagePlaceholder": "Введіть ваше повідомлення або загальне запитання...",
+    "micAccessDeniedTitle": "Доступ до Мікрофона Заборонено",
+    "micAccessDeniedDescription": "Будь ласка, увімкніть дозвіл на використання мікрофона в налаштуваннях вашого браузера для використання голосового введення.",
+    "micAccessErrorTitle": "Помилка Мікрофона",
+    "speechRecognitionNotSupportedTitle": "Голосове Введення Не Підтримується",
+    "speechRecognitionNotSupportedDescription": "Ваш браузер не підтримує розпізнавання мовлення.",
+    "speechRecognitionErrorTitle": "Помилка Голосового Введення",
+    "micPermissionOrSupportError": "Доступ до мікрофона заборонено або функція не підтримується вашим браузером."
   },
   "SemanticSearchPage": {
     "title": "Семантичний Пошук",
@@ -184,3 +193,4 @@
     "selectModel": "Обрати Модель"
   }
 }
+

@@ -10,12 +10,12 @@ import { useFiles } from "@/contexts/file-provider";
 import { ragBasedQuery, type RagBasedQueryInput, type RagBasedQueryOutput } from "@/ai/flows/rag-based-query";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, AlertTriangle, Info, Send, Mic, User, BrainCircuit } from "lucide-react";
+import { Loader2, AlertTriangle, Info, Send, Mic, User, BrainCircuit, StopCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 import { ModelSelector, defaultModelId } from "@/components/model-selector";
 
@@ -45,8 +45,66 @@ export default function RagPage() {
   const { files: allUploadedFiles } = useFiles();
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  
+  const [isRecording, setIsRecording] = useState(false);
+  const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
+  const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null);
+  const locale = useLocale();
 
-  const selectedFile = allUploadedFiles.find(f => f.id === selectedFileId);
+
+  useEffect(() => {
+    const SpeechRecognitionAPI = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognitionAPI) {
+      setHasMicPermission(false);
+      toast({
+        title: t('speechRecognitionNotSupportedTitle'),
+        description: t('speechRecognitionNotSupportedDescription'),
+        variant: 'default',
+        duration: 7000,
+      });
+      return;
+    }
+
+    const checkAndRequestMicPermission = async () => {
+        try {
+            await navigator.mediaDevices.getUserMedia({ audio: true });
+            setHasMicPermission(true);
+        } catch (err) {
+            console.error("Microphone access error:", err);
+            setHasMicPermission(false);
+            if ((err as Error).name === 'NotAllowedError' || (err as Error).name === 'PermissionDeniedError') {
+                 toast({
+                    title: t('micAccessDeniedTitle'),
+                    description: t('micAccessDeniedDescription'),
+                    variant: 'destructive',
+                 });
+            } else {
+                 toast({
+                    title: t('micAccessErrorTitle'),
+                    description: (err as Error).message,
+                    variant: 'destructive',
+                 });
+            }
+        }
+    };
+    
+    if (hasMicPermission === null) { 
+        checkAndRequestMicPermission();
+    }
+  }, [hasMicPermission, t, toast]);
+
+  useEffect(() => {
+    return () => {
+      if (speechRecognitionRef.current) {
+        speechRecognitionRef.current.stop();
+        speechRecognitionRef.current.onresult = null;
+        speechRecognitionRef.current.onerror = null;
+        speechRecognitionRef.current.onstart = null;
+        speechRecognitionRef.current.onend = null;
+      }
+    };
+  }, []);
+
 
   const scrollToBottom = useCallback(() => {
     if (scrollAreaRef.current) {
@@ -61,7 +119,7 @@ export default function RagPage() {
     // Clear chat when selected file changes
     setChatMessages([]);
     setError(null);
-    setQuery(""); // Clear query input as well
+    setQuery(""); 
   }, [selectedFileId]);
 
   const handleSendMessage = async () => {
@@ -134,6 +192,76 @@ export default function RagPage() {
       scrollToBottom();
     }
   };
+
+  const handleToggleRecording = () => {
+    if (hasMicPermission === false) {
+      toast({ 
+        title: t('micAccessDeniedTitle'), 
+        description: t('micPermissionOrSupportError'), 
+        variant: "destructive" 
+      });
+      return;
+    }
+    if (hasMicPermission === null) {
+      toast({ 
+        title: t('micAccessDeniedTitle'), 
+        description: t('micAccessDeniedDescription'), // Or a "please wait for permission"
+        variant: "default" 
+      });
+      return;
+    }
+
+    const SpeechRecognitionAPI = window.SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognitionAPI) return;
+
+    if (isRecording) {
+      speechRecognitionRef.current?.stop();
+      setIsRecording(false); 
+    } else {
+      const recognition = new SpeechRecognitionAPI();
+      
+      let speechLang = locale;
+      if (locale === 'ua') speechLang = 'uk-UA';
+      else if (locale === 'en') speechLang = 'en-US';
+      else if (locale === 'es') speechLang = 'es-ES';
+      recognition.lang = speechLang;
+      
+      recognition.interimResults = true;
+      recognition.continuous = false; 
+
+      recognition.onstart = () => {
+        setIsRecording(true);
+      };
+
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
+        const fullTranscript = Array.from(event.results)
+          .map(result => result[0])
+          .map(result => result.transcript)
+          .join('');
+        setQuery(fullTranscript);
+      };
+
+      recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
+        console.error("Speech recognition error", event.error);
+        toast({ title: t('speechRecognitionErrorTitle'), description: event.error, variant: "destructive" });
+        setIsRecording(false);
+      };
+
+      recognition.onend = () => {
+        setIsRecording(false);
+      };
+
+      try {
+        recognition.start();
+        speechRecognitionRef.current = recognition;
+      } catch (e) {
+        console.error("Error starting speech recognition:", e);
+        toast({ title: t('speechRecognitionErrorTitle'), description: (e as Error).message, variant: "destructive" });
+        setIsRecording(false);
+      }
+    }
+  };
+
 
   return (
     <div className="container mx-auto py-8 h-[calc(100vh-var(--header-height,8rem))] flex flex-col">
@@ -241,15 +369,26 @@ export default function RagPage() {
                   disabled={isLoading}
                   aria-label={t('queryPlaceholder')}
                 />
-                <Button type="button" variant="ghost" size="icon" className="text-muted-foreground hover:text-primary" disabled={isLoading}>
-                  <Mic className="h-5 w-5" />
-                  <span className="sr-only">{t('voiceInput')}</span>
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="text-muted-foreground hover:text-primary" 
+                  onClick={handleToggleRecording}
+                  disabled={hasMicPermission === false || (isLoading && !isRecording) || hasMicPermission === null}
+                  aria-label={isRecording ? t('stopVoiceInput') : t('voiceInput')}
+                >
+                  {isRecording ? <StopCircle className="h-5 w-5 text-destructive" /> : <Mic className="h-5 w-5" />}
+                  <span className="sr-only">{isRecording ? t('stopVoiceInput') : t('voiceInput')}</span>
                 </Button>
                 <Button type="submit" size="icon" className="bg-primary hover:bg-primary/90" disabled={isLoading || !query.trim()}>
                   {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                   <span className="sr-only">{t('sendMessage')}</span>
                 </Button>
               </form>
+              {hasMicPermission === false && (
+                <p className="text-xs text-destructive text-center mt-1 px-2">{t('micPermissionOrSupportError')}</p>
+              )}
               <div className="text-xs text-muted-foreground text-center mt-2 w-full">
                 <ModelSelector selectedModelId={selectedModelId} onModelChange={setSelectedModelId} />
               </div>
@@ -260,3 +399,4 @@ export default function RagPage() {
     </div>
   );
 }
+
