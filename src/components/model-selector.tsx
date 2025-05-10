@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BrainCircuit, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react"; // BrainCircuit removed
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
@@ -63,8 +63,8 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
       // If selectedModelId is not in the list (e.g. old value from localStorage), fallback to default
       const defaultModel = availableModels.find(m => m.id === defaultModelId);
       setCurrentSelectedModel(defaultModel);
-      if (selectedModelId !== defaultModelId) { // Notify parent if current selection is invalid
-          onModelChange(defaultModelId);
+      if (selectedModelId !== defaultModelId && defaultModel) { // Notify parent if current selection is invalid
+          onModelChange(defaultModel.id);
       }
     }
   }, [selectedModelId, onModelChange]);
@@ -82,9 +82,9 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
           className="flex items-center text-xs text-muted-foreground p-1 h-auto hover:bg-muted focus-visible:ring-0 focus-visible:ring-offset-0"
           aria-label={commonT('modelLabel', { modelName: currentSelectedModel.name })}
         >
+          <span className={cn("w-2 h-2 rounded-full mr-1.5 flex-shrink-0", currentSelectedModel.dotColorClass)} />
           {commonT('modelLabelShort', { modelName: currentSelectedModel.name })}
-          <BrainCircuit size={14} className="ml-1" />
-          <ChevronDown size={14} className="ml-0.5 opacity-70" />
+          <ChevronDown size={14} className="ml-1 opacity-70" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-72">
@@ -114,3 +114,4 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
     </DropdownMenu>
   );
 }
+
