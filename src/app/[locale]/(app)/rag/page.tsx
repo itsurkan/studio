@@ -1,4 +1,3 @@
-
 "use client";
 
 import type React from "react";
@@ -361,7 +360,7 @@ export default function RagPage() {
             <CardFooter className="p-2 sm:p-4 border-t dark:bg-muted flex flex-col items-center"> {/* Adjusted footer bg for dark mode */}
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
-                className="flex items-center w-full space-x-2"
+                className="flex items-end w-full space-x-2" // Changed items-center to items-end
               >
                 <Textarea
                   placeholder={selectedFile ? t('typeYourMessagePlaceholder') : t('typeYourGeneralMessagePlaceholder')}
@@ -374,7 +373,7 @@ export default function RagPage() {
                     }
                   }}
                   rows={1}
-                  className="flex-grow resize-none min-h-[40px] max-h-[120px] text-sm sm:text-base"
+                  className="flex-grow resize-none min-h-[40px] text-sm sm:text-base" // Removed max-h-[120px]
                   disabled={isLoading}
                   aria-label={t('queryPlaceholder')}
                 />
@@ -408,4 +407,3 @@ export default function RagPage() {
     </div>
   );
 }
-
