@@ -70,7 +70,7 @@
   },
   "RagPage": {
     "title": "Чат з Вашими Даними",
-    "description": "Виберіть файл і почніть ставити запитання.",
+    "description": "Виберіть файл, щоб ставити до нього запитання, або розпочніть загальну розмову.",
     "chattingWith": "Чат з: {fileName}",
     "selectFileTitle": "Виберіть Файл",
     "selectFileDescription": "Оберіть документ для взаємодії.",
@@ -103,11 +103,14 @@
     "toastCopyFailedDescription": "Не вдалося скопіювати текст.",
     "chatInterfaceTitle": "Інтерфейс Чату",
     "chatWithFile": "Чат з: {fileName}",
-    "startConversation": "Виберіть файл та поставте запитання, щоб розпочати розмову з {fileName}.",
-    "typeYourMessagePlaceholder": "Введіть ваше повідомлення...",
+    "startConversationWithFile": "Поставте запитання, щоб розпочати розмову про {fileName}.",
+    "typeYourMessagePlaceholder": "Введіть ваше повідомлення про {fileName}...",
     "selectFileToChatPlaceholder": "Виберіть файл, щоб почати чат",
     "voiceInput": "Голосове введення (не реалізовано)",
-    "sendMessage": "Надіслати Повідомлення"
+    "sendMessage": "Надіслати Повідомлення",
+    "generalChatTitle": "Загальний Чат",
+    "startGeneralConversation": "Запитайте мене будь-що, або виберіть файл ліворуч, щоб поспілкуватися про його вміст.",
+    "typeYourGeneralMessagePlaceholder": "Введіть ваше повідомлення або загальне запитання..."
   },
   "SemanticSearchPage": {
     "title": "Семантичний Пошук",

@@ -70,7 +70,7 @@
   },
   "RagPage": {
     "title": "Chat with Your Data",
-    "description": "Select a file and start asking questions.",
+    "description": "Select a file to ask questions about it, or start a general conversation.",
     "chattingWith": "Chatting with: {fileName}",
     "selectFileTitle": "Select a File",
     "selectFileDescription": "Choose a document to interact with.",
@@ -103,11 +103,14 @@
     "toastCopyFailedDescription": "Could not copy text.",
     "chatInterfaceTitle": "Chat Interface",
     "chatWithFile": "Chat with: {fileName}",
-    "startConversation": "Select a file and ask a question to start the conversation with {fileName}.",
-    "typeYourMessagePlaceholder": "Type your message...",
+    "startConversationWithFile": "Ask a question to start the conversation about {fileName}.",
+    "typeYourMessagePlaceholder": "Type your message about {fileName}...",
     "selectFileToChatPlaceholder": "Select a file to start chatting",
     "voiceInput": "Voice Input (not implemented)",
-    "sendMessage": "Send Message"
+    "sendMessage": "Send Message",
+    "generalChatTitle": "General Chat",
+    "startGeneralConversation": "Ask me anything, or select a file from the left to chat about its content.",
+    "typeYourGeneralMessagePlaceholder": "Type your message or ask a general question..."
   },
   "SemanticSearchPage": {
     "title": "Semantic Search",

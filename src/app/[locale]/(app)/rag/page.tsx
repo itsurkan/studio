@@ -61,13 +61,10 @@ export default function RagPage() {
     // Clear chat when selected file changes
     setChatMessages([]);
     setError(null);
+    setQuery(""); // Clear query input as well
   }, [selectedFileId]);
 
   const handleSendMessage = async () => {
-    if (!selectedFile) {
-      toast({ title: t('toastNoFileSelectedTitle'), description: t('toastNoFileSelectedDescription'), variant: "default" });
-      return;
-    }
     if (!query.trim()) {
       return;
     }
@@ -100,7 +97,7 @@ export default function RagPage() {
     try {
       const ragInput: RagBasedQueryInput = {
         query: currentQuery,
-        documentContent: selectedFile.content,
+        documentContent: selectedFile ? selectedFile.content : undefined,
         outputFormat: "paragraphs", 
         modelId: selectedModelId,
       };
@@ -142,7 +139,9 @@ export default function RagPage() {
     <div className="container mx-auto py-8 h-[calc(100vh-var(--header-height,8rem))] flex flex-col">
       <div className="mb-4">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('title')}</h1>
-        <p className="text-muted-foreground">{selectedFile ? t('chattingWith', {fileName: selectedFile.name}) : t('description')}</p>
+        <p className="text-muted-foreground">
+          {selectedFile ? t('chattingWith', {fileName: selectedFile.name}) : t('description')}
+        </p>
       </div>
 
       <div className="flex flex-col md:grid md:grid-cols-3 gap-6 flex-grow min-h-0">
@@ -167,25 +166,20 @@ export default function RagPage() {
           <Card className="shadow-lg flex-grow flex flex-col h-full">
             <CardHeader>
               <CardTitle>
-                {selectedFile ? t('chatWithFile', {fileName: selectedFile.name}) : t('chatInterfaceTitle')}
+                {selectedFile ? t('chatWithFile', {fileName: selectedFile.name}) : t('generalChatTitle')}
               </CardTitle>
             </CardHeader>
             
             <CardContent className="flex-grow overflow-hidden p-0">
               <ScrollArea ref={scrollAreaRef} className="h-full p-4 space-y-4">
-                {chatMessages.length === 0 && !selectedFile && (
-                  <Alert variant="default"> {/* Removed m-4 */}
-                    <Info className="h-4 w-4" />
-                    <AlertTitle>{t('selectAFileAlertTitle')}</AlertTitle>
-                    <AlertDescription>
-                      {t('selectAFileAlertDescription')}
-                    </AlertDescription>
-                  </Alert>
-                )}
-                 {chatMessages.length === 0 && selectedFile && (
-                  <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+                {chatMessages.length === 0 && (
+                  <div className="flex flex-col items-center justify-center h-full text-muted-foreground p-4 text-center">
                     <BrainCircuit size={48} className="mb-2"/>
-                    <p>{t('startConversation', {fileName: selectedFile.name})}</p>
+                    {selectedFile ? (
+                      <p>{t('startConversationWithFile', {fileName: selectedFile.name})}</p>
+                    ) : (
+                      <p>{t('startGeneralConversation')}</p>
+                    )}
                   </div>
                 )}
                 {chatMessages.map((msg) => (
@@ -233,7 +227,7 @@ export default function RagPage() {
                 className="flex items-center w-full space-x-2"
               >
                 <Textarea
-                  placeholder={selectedFile ? t('typeYourMessagePlaceholder') : t('selectFileToChatPlaceholder')}
+                  placeholder={selectedFile ? t('typeYourMessagePlaceholder') : t('typeYourGeneralMessagePlaceholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   onKeyDown={(e) => {
@@ -244,14 +238,14 @@ export default function RagPage() {
                   }}
                   rows={1}
                   className="flex-grow resize-none min-h-[40px] max-h-[120px] text-sm sm:text-base"
-                  disabled={isLoading || !selectedFile}
+                  disabled={isLoading}
                   aria-label={t('queryPlaceholder')}
                 />
-                <Button type="button" variant="ghost" size="icon" className="text-muted-foreground hover:text-primary" disabled={isLoading || !selectedFile}>
+                <Button type="button" variant="ghost" size="icon" className="text-muted-foreground hover:text-primary" disabled={isLoading}>
                   <Mic className="h-5 w-5" />
                   <span className="sr-only">{t('voiceInput')}</span>
                 </Button>
-                <Button type="submit" size="icon" className="bg-primary hover:bg-primary/90" disabled={isLoading || !selectedFile || !query.trim()}>
+                <Button type="submit" size="icon" className="bg-primary hover:bg-primary/90" disabled={isLoading || !query.trim()}>
                   {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                   <span className="sr-only">{t('sendMessage')}</span>
                 </Button>
@@ -266,4 +260,3 @@ export default function RagPage() {
     </div>
   );
 }
-

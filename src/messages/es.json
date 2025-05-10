@@ -70,7 +70,7 @@
   },
   "RagPage": {
     "title": "Chatea con tus Datos",
-    "description": "Selecciona un archivo y comienza a hacer preguntas.",
+    "description": "Selecciona un archivo para hacerle preguntas, o inicia una conversación general.",
     "chattingWith": "Chateando con: {fileName}",
     "selectFileTitle": "Selecciona un Archivo",
     "selectFileDescription": "Elige un documento para interactuar.",
@@ -103,11 +103,14 @@
     "toastCopyFailedDescription": "No se pudo copiar el texto.",
     "chatInterfaceTitle": "Interfaz de Chat",
     "chatWithFile": "Chatear con: {fileName}",
-    "startConversation": "Selecciona un archivo y haz una pregunta para iniciar la conversación con {fileName}.",
-    "typeYourMessagePlaceholder": "Escribe tu mensaje...",
+    "startConversationWithFile": "Haz una pregunta para iniciar la conversación sobre {fileName}.",
+    "typeYourMessagePlaceholder": "Escribe tu mensaje sobre {fileName}...",
     "selectFileToChatPlaceholder": "Selecciona un archivo para empezar a chatear",
     "voiceInput": "Entrada de Voz (no implementado)",
-    "sendMessage": "Enviar Mensaje"
+    "sendMessage": "Enviar Mensaje",
+    "generalChatTitle": "Chat General",
+    "startGeneralConversation": "Pregúntame cualquier cosa, o selecciona un archivo de la izquierda para chatear sobre su contenido.",
+    "typeYourGeneralMessagePlaceholder": "Escribe tu mensaje o haz una pregunta general..."
   },
   "SemanticSearchPage": {
     "title": "Búsqueda Semántica",
