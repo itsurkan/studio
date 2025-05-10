@@ -32,7 +32,7 @@ export function AppHeader() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="flex flex-col p-0 bg-sidebar w-[250px] sm:w-[300px]" aria-label={t('toggleMenu')}>
-                <SheetHeader className="p-4 border-b border-sidebar-border">
+                <SheetHeader className="p-6 border-b border-sidebar-border">
                    {/* SheetTitle is required for Radix Dialog (Sheet) accessibility. 
                        It will be visually hidden if not explicitly rendered but is needed by screen readers.
                        Here we make it the app title.
@@ -60,3 +60,4 @@ export function AppHeader() {
     </header>
   );
 }
+
