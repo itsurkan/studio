@@ -2,7 +2,7 @@
 "use client";
 
 import type { ReactNode } from 'react';
-import { createContext, useEffect, useState, useCallback } from 'react';
+import { createContext, useEffect, useState, useCallback, useRef } from 'react'; // Added useRef
 import { type User, onAuthStateChanged, signInWithRedirect, GoogleAuthProvider, signOut as firebaseSignOut, getRedirectResult } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 import { useToast } from '@/hooks/use-toast';
@@ -25,27 +25,35 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // For initial auth state check
   const { toast } = useToast();
   const router = useRouter();
-  const t = useTranslations('AuthContext'); // Initialize translations
+  const t = useTranslations('AuthContext');
+  const redirectHandlerCalled = useRef(false); // To ensure redirect logic runs once
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
+      setLoading(false); // Primary signal that auth state is resolved
     });
     return () => unsubscribe();
   }, []);
 
   // Handle redirect result
   useEffect(() => {
+    // Wait for initial auth loading to complete AND ensure this runs only once.
+    if (loading || redirectHandlerCalled.current) {
+      return;
+    }
+
     const handleRedirect = async () => {
+      redirectHandlerCalled.current = true; // Mark as attempted/called
+      // Do not set global loading state here to prevent AppLayout re-renders of children
       try {
-        setLoading(true);
         const result = await getRedirectResult(auth);
         if (result && result.user) {
-          setUser(result.user);
+          // setUser(result.user); // onAuthStateChanged will likely handle this.
+                                // If user info from result is richer/sooner, this can be reconsidered.
           toast({ 
             title: t('loginSuccessfulTitle'), 
             description: t('loginSuccessfulDescription'), 
@@ -61,20 +69,19 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
           description: errorMessage, 
           variant: 'destructive' 
         });
-      } finally {
-        setLoading(false);
       }
+      // No setLoading(false) here as we didn't set global loading for this operation
     };
+    
     handleRedirect();
-  }, [router, t, toast]);
+
+  }, [loading, router, t, toast]); // `loading` ensures we wait for onAuthStateChanged
 
   const signInWithGoogle = useCallback(async () => {
-    setLoading(true);
+    // setLoading(true); // This might be too broad; signInWithRedirect handles its own UI transition
     try {
       const provider = new GoogleAuthProvider();
-      // Using signInWithRedirect instead of signInWithPopup
       await signInWithRedirect(auth, provider);
-      // No direct navigation here as getRedirectResult will handle it
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign in with Google.';
@@ -83,14 +90,15 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         description: errorMessage, 
         variant: 'destructive' 
       });
-      setLoading(false);
+      // setLoading(false); // Only if we set it true at the start of this specific action
     }
-  }, [toast, t]);
+  }, [toast, t]); // Removed setLoading from signInWithGoogle for redirect flow
 
   const signOutUser = useCallback(async () => {
-    setLoading(true);
+    setLoading(true); // Appropriate here as it's a definite auth state change initiation
     try {
       await firebaseSignOut(auth);
+      // User state will be set to null by onAuthStateChanged, triggering loading=false
       toast({ 
         title: t('loggedOutTitle'), 
         description: t('loggedOutDescription') 
@@ -104,8 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps): JSX.Element {
         description: errorMessage, 
         variant: 'destructive' 
       });
-    } finally {
-      setLoading(false);
+      setLoading(false); // Ensure loading is false on error
     }
   }, [toast, router, t]);
 
