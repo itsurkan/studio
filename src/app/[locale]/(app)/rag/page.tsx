@@ -76,6 +76,16 @@ export default function RagPage() {
     }
 
     const checkAndRequestMicPermission = async () => {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            console.error("MediaDevices API or getUserMedia not supported.");
+            setHasMicPermission(false);
+            toast({
+                title: t('micNotSupportedTitle'),
+                description: t('micNotSupportedDescription'),
+                variant: 'destructive',
+            });
+            return;
+        }
         try {
             await navigator.mediaDevices.getUserMedia({ audio: true });
             setHasMicPermission(true);
@@ -474,4 +484,3 @@ export default function RagPage() {
     </div>
   );
 }
-
