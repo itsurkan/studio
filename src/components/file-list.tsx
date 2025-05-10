@@ -37,7 +37,7 @@ export function FileList({
 
   if (filesToDisplay.length === 0) {
     return (
-      <Card className="shadow-md">
+      <Card className="shadow-md w-full"> {/* Added w-full */}
         <CardHeader>
           <CardTitle>{t('myFiles')}</CardTitle>
         </CardHeader>
@@ -114,3 +114,4 @@ export function FileList({
     </Card>
   );
 }
+
