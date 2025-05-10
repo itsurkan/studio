@@ -38,12 +38,12 @@ const availableModels: LLMModel[] = [
   { id: "openrouter/grok-3-mini", name: "Grok 3 Mini", isPro: true, dotColorClass: "bg-yellow-400" },
   { id: "googleai/gemini-1.5-pro-latest", name: "Gemini 1.5 Pro", isPro: true, dotColorClass: "bg-primary" },
   { id: "googleai/gemini-1.5-flash-latest", name: "Gemini 1.5 Flash", isPro: true, dotColorClass: "bg-green-500" },
-  { id: "googleai/gemini-2.0-flash", name: "Gemini 2.0 Flash", isPro: true, dotColorClass: "bg-muted-foreground" }, // Default model
+  { id: "googleai/gemini-2.0-flash", name: "Gemini 2.0 Flash", isPro: true, dotColorClass: "bg-muted-foreground" }, 
 
   // Existing free OpenRouter models
   { id: "openrouter/nous-hermes-2-mixtral-8x7b-dpo", name: "Nous Hermes 2 Mixtral DPO", isPro: false, dotColorClass: "bg-sky-500" },
   { id: "openrouter/mistral-7b-instruct-v0.2", name: "Mistral 7B Instruct", isPro: false, dotColorClass: "bg-sky-500" },
-  { id: "openrouter/openchat-3.5", name: "OpenChat 3.5", isPro: false, dotColorClass: "bg-sky-500" },
+  { id: "openrouter/openchat-3.5", name: "OpenChat 3.5", isPro: false, dotColorClass: "bg-sky-500" }, // Default model
   { id: "openrouter/huggingfaceh4/zephyr-7b-beta", name: "Zephyr 7B Beta", isPro: false, dotColorClass: "bg-sky-500" },
 
   // New free OpenRouter models from user request
@@ -55,7 +55,7 @@ const availableModels: LLMModel[] = [
   { id: "qwen/qwen3-235b-a22b:free", name: "Qwen3 235B A22B", isPro: false, dotColorClass: "bg-purple-500" },
 ];
 
-export const defaultModelId = "googleai/gemini-2.0-flash"; 
+export const defaultModelId = "openrouter/openchat-3.5"; 
 
 interface ModelSelectorProps {
   selectedModelId: string;
