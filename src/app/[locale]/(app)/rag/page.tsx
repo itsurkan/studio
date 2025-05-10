@@ -49,8 +49,9 @@ export default function RagPage() {
   const { toast } = useToast();
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null); // Ref for the end of the chat list
   
-  const [isRecording, setIsRecording] = useState(false);
+  const [isRecording, setIsRecording] = useState(isRecording);
   const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
   const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null);
   const locale = useLocale();
@@ -120,27 +121,22 @@ export default function RagPage() {
 
   useEffect(() => {
     if (textareaRef.current) {
-      // Temporarily remove vertical scroll to avoid flash of scrollbar during recalculation
       textareaRef.current.style.overflowY = "hidden";
-      // Reset height to 'auto' to get the correct scrollHeight for the current content
       textareaRef.current.style.height = "auto";
-      // Set the new height based on scrollHeight
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [query]);
 
 
   const scrollToBottom = useCallback(() => {
-    if (scrollAreaRef.current) {
-      const scrollableView = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
-      if (scrollableView) {
-        scrollableView.scrollTop = scrollableView.scrollHeight;
-      }
-    }
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, []);
 
   useEffect(() => {
-    // Clear chat when selected file changes
+    scrollToBottom();
+  }, [chatMessages, scrollToBottom]);
+
+  useEffect(() => {
     setChatMessages([]);
     setError(null);
     setQuery(""); 
@@ -175,7 +171,7 @@ export default function RagPage() {
       name: "Gnosis.AI",
       modelUsed: currentModelName
     }]);
-    scrollToBottom();
+    // scrollToBottom(); // Removed, will be handled by useEffect on chatMessages change
 
     try {
       const ragInput: RagBasedQueryInput = {
@@ -214,7 +210,7 @@ export default function RagPage() {
       });
     } finally {
       setIsLoading(false);
-      scrollToBottom();
+      // scrollToBottom(); // Removed, will be handled by useEffect on chatMessages change
     }
   };
 
@@ -226,7 +222,6 @@ export default function RagPage() {
       clearTimeout(speechPauseTimerRef.current);
       speechPauseTimerRef.current = null;
     }
-    // isRecording will be set to false in onend
   };
 
   const handleToggleRecording = () => {
@@ -253,13 +248,12 @@ export default function RagPage() {
     if (isRecording) {
       stopRecording();
     } else {
-      // Preserve existing typed text or start new line if not empty
       let currentQueryValue = query;
       if (currentQueryValue.trim() && !currentQueryValue.endsWith('\n')) {
         initialQueryForSessionRef.current = currentQueryValue + '\n';
-      } else if (currentQueryValue.trim() === '') { // if query is empty or only whitespace
+      } else if (currentQueryValue.trim() === '') {
         initialQueryForSessionRef.current = '';
-      } else { // query has content and might end with \n
+      } else { 
         initialQueryForSessionRef.current = currentQueryValue;
       }
       setQuery(initialQueryForSessionRef.current); 
@@ -286,7 +280,7 @@ export default function RagPage() {
         }
 
         let sessionTranscript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) { // Process only new results
+        for (let i = event.resultIndex; i < event.results.length; i++) {
           if (event.results[i].isFinal) {
             sessionTranscript += event.results[i][0].transcript;
           } else {
@@ -295,13 +289,10 @@ export default function RagPage() {
         }
         
         setQuery(prevQuery => {
-            // If the session transcript comes after a final result, add a space or handle as needed
-            // For simplicity, just appending. For more robust handling, might need to track final segments.
-            // If initialQueryForSessionRef.current already has the prefix, just add the new transcript
             if (prevQuery.startsWith(initialQueryForSessionRef.current)) {
                  return initialQueryForSessionRef.current + sessionTranscript;
             }
-            return prevQuery + sessionTranscript; // Fallback, less likely
+            return prevQuery + sessionTranscript;
         });
 
 
@@ -309,13 +300,12 @@ export default function RagPage() {
           stopRecording();
         }, SPEECH_PAUSE_TIMEOUT);
         
-        scrollToBottom();
+        // scrollToBottom(); // Removed, will be handled by useEffect
       };
 
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error("Speech recognition error", event.error);
         toast({ title: t('speechRecognitionErrorTitle'), description: event.error, variant: "destructive" });
-        // isRecording(false) will be handled by onend
       };
 
       recognition.onend = () => {
@@ -324,7 +314,6 @@ export default function RagPage() {
           clearTimeout(speechPauseTimerRef.current);
           speechPauseTimerRef.current = null;
         }
-        // The query state should be up-to-date from the last onresult
       };
 
       try {
@@ -366,7 +355,7 @@ export default function RagPage() {
         </div>
 
         <div className="md:col-span-2 flex flex-col flex-grow min-h-0">
-          <Card className="shadow-lg flex-grow flex flex-col h-full bg-card"> {/* Ensured card uses card background */}
+          <Card className="shadow-lg flex-grow flex flex-col h-full bg-card">
             <CardHeader>
               <CardTitle>
                 {selectedFile ? t('chatWithFile', {fileName: selectedFile.name}) : t('generalChatTitle')}
@@ -420,6 +409,7 @@ export default function RagPage() {
                     </div>
                   </div>
                 ))}
+                <div ref={chatEndRef} /> {/* Element to scroll to */}
                 {error && (
                   <Alert variant="destructive" className="mt-4">
                     <AlertTriangle className="h-4 w-4" />
@@ -430,7 +420,7 @@ export default function RagPage() {
               </ScrollArea>
             </CardContent>
             
-            <CardFooter className="p-2 sm:p-4 border-t dark:bg-muted flex flex-col items-center"> {/* Adjusted footer bg for dark mode */}
+            <CardFooter className="p-2 sm:p-4 border-t dark:bg-muted flex flex-col items-center">
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} 
                 className="flex items-end w-full space-x-2"
@@ -481,6 +471,3 @@ export default function RagPage() {
     </div>
   );
 }
-
-
-

@@ -63,7 +63,16 @@ const ragBasedQueryFlow = ai.defineFlow(
         console.warn(`Could not find model generator for ID: ${input.modelId}. Falling back to default.`);
       }
     }
-    const {output} = await prompt(input, { model: modelToUse });
-    return output!;
+    const result = await prompt(input, { model: modelToUse });
+    
+    if (!result.output) {
+      console.error('RAG Query Flow: Prompt did not return an output.', result);
+      // This error will be caught by the client-side try/catch block.
+      throw new Error('AI model failed to produce a valid output. The output was empty.');
+    }
+    // The output schema should ensure result.output matches RagBasedQueryOutput.
+    // If result.output is truthy but doesn't match the schema, Genkit/Zod might throw an error earlier.
+    return result.output;
   }
 );
+
