@@ -1,3 +1,4 @@
+
 "use client";
 
 import type React from "react";
@@ -24,13 +25,22 @@ interface LLMModel {
   dotColorClass?: string;
 }
 
+// Updated list of available models including OpenRouter options
 const availableModels: LLMModel[] = [
+  { id: "openrouter/o4-mini-high", name: "o4-mini-high", isPro: false, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/claude-3.7-thinking", name: "Claude 3.7 Thinking", isPro: false, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/gpt-4.5-turbo", name: "GPT 4.5", isPro: true, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/gemini-2.5-pro", name: "Gemini 2.5 Pro", isPro: true, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/grok-3", name: "Grok 3", isPro: true, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/claude-3.7", name: "Claude 3.7", isPro: false, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/gpt-4.1-preview", name: "GPT 4.1", isPro: false, dotColorClass: "bg-muted-foreground" },
+  { id: "openrouter/grok-3-mini", name: "Grok 3 Mini", isPro: false, dotColorClass: "bg-yellow-400" },
   { id: "googleai/gemini-1.5-pro-latest", name: "Gemini 1.5 Pro", isPro: true, dotColorClass: "bg-primary" },
   { id: "googleai/gemini-1.5-flash-latest", name: "Gemini 1.5 Flash", isPro: false, dotColorClass: "bg-green-500" },
   { id: "googleai/gemini-2.0-flash", name: "Gemini 2.0 Flash", isPro: false, dotColorClass: "bg-muted-foreground" },
 ];
 
-export const defaultModelId = "googleai/gemini-2.0-flash";
+export const defaultModelId = "googleai/gemini-2.0-flash"; // Default model remains unchanged
 
 interface ModelSelectorProps {
   selectedModelId: string;
@@ -42,15 +52,25 @@ export function ModelSelector({ selectedModelId, onModelChange }: ModelSelectorP
   const commonT = useTranslations("Common");
   
   const [currentSelectedModel, setCurrentSelectedModel] = useState<LLMModel | undefined>(
-    availableModels.find(m => m.id === selectedModelId)
+    availableModels.find(m => m.id === selectedModelId) || availableModels.find(m => m.id === defaultModelId)
   );
 
   useEffect(() => {
-    setCurrentSelectedModel(availableModels.find(m => m.id === selectedModelId));
-  }, [selectedModelId]);
+    const model = availableModels.find(m => m.id === selectedModelId);
+    if (model) {
+      setCurrentSelectedModel(model);
+    } else {
+      // If selectedModelId is not in the list (e.g. old value from localStorage), fallback to default
+      const defaultModel = availableModels.find(m => m.id === defaultModelId);
+      setCurrentSelectedModel(defaultModel);
+      if (selectedModelId !== defaultModelId) { // Notify parent if current selection is invalid
+          onModelChange(defaultModelId);
+      }
+    }
+  }, [selectedModelId, onModelChange]);
 
   if (!currentSelectedModel) {
-    // Fallback or loading state if needed, though selectedModelId should always be valid
+    // Should not happen if defaultModelId is always in availableModels
     return null; 
   }
 
