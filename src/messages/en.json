@@ -1,4 +1,3 @@
-
 {
   "AppHeader": {
     "title": "Gnosis.AI",
@@ -175,7 +174,10 @@
   "Common": {
     "you": "You",
     "ai": "AI",
-    "modelLabel": "Model: {modelName}"
+    "modelLabel": "Model: {modelName}",
+    "modelLabelShort": "{modelName}"
+  },
+  "ModelSelector": {
+    "selectModel": "Select Model"
   }
 }
-

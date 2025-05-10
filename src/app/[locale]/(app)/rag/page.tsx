@@ -16,15 +16,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { ModelSelector, defaultModelId } from "@/components/model-selector";
+
 
 interface ChatMessageItem {
   id: string;
   role: "user" | "ai";
   content: string;
-  timestamp?: string; // e.g., "GPT 4.1" or actual time
+  timestamp?: string; 
   isLoading?: boolean;
   avatar?: string;
   name?: string;
+  modelUsed?: string;
 }
 
 export default function RagPage() {
@@ -36,6 +39,7 @@ export default function RagPage() {
   const [chatMessages, setChatMessages] = useState<ChatMessageItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedModelId, setSelectedModelId] = useState<string>(defaultModelId);
 
   const { files: allUploadedFiles } = useFiles();
   const { toast } = useToast();
@@ -53,10 +57,6 @@ export default function RagPage() {
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [chatMessages, scrollToBottom]);
-
-  useEffect(() => {
     // Clear chat when selected file changes
     setChatMessages([]);
     setError(null);
@@ -68,7 +68,6 @@ export default function RagPage() {
       return;
     }
     if (!query.trim()) {
-      // Don't toast for empty query, just don't send
       return;
     }
 
@@ -85,16 +84,24 @@ export default function RagPage() {
     setIsLoading(true);
     setError(null);
     
-    // Add a temporary loading message for AI
     const aiLoadingMessageId = `ai-loading-${Date.now()}`;
-    setChatMessages(prev => [...prev, { id: aiLoadingMessageId, role: 'ai', content: '', isLoading: true, name: "Gnosis.AI" }]);
+    const currentModelName = selectedModelId.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || selectedModelId;
+    setChatMessages(prev => [...prev, { 
+      id: aiLoadingMessageId, 
+      role: 'ai', 
+      content: '', 
+      isLoading: true, 
+      name: "Gnosis.AI",
+      modelUsed: currentModelName
+    }]);
     scrollToBottom();
 
     try {
       const ragInput: RagBasedQueryInput = {
         query: currentQuery,
         documentContent: selectedFile.content,
-        outputFormat: "paragraphs", // Default to paragraphs for chat
+        outputFormat: "paragraphs", 
+        modelId: selectedModelId,
       };
       
       const result: RagBasedQueryOutput = await ragBasedQuery(ragInput);
@@ -103,16 +110,15 @@ export default function RagPage() {
         id: `ai-${Date.now()}`,
         role: "ai",
         content: result.answer,
-        name: "Gnosis.AI", // Or "GPT 4.1" as in mockup
-        timestamp: "GPT 4.1" // Mockup detail
+        name: "Gnosis.AI",
+        timestamp: currentModelName 
       };
-      // Replace loading message with actual response
       setChatMessages(prev => prev.filter(msg => msg.id !== aiLoadingMessageId).concat(aiResponseMessage));
 
     } catch (err) {
       console.error("RAG query error:", err);
       const errorMessage = err instanceof Error ? err.message : "An unknown error occurred during RAG processing.";
-      setError(errorMessage); // Display error in chat or as toast
+      setError(errorMessage); 
       setChatMessages(prev => prev.filter(msg => msg.id !== aiLoadingMessageId).concat({
         id: `ai-error-${Date.now()}`,
         role: 'ai',
@@ -138,10 +144,9 @@ export default function RagPage() {
         <p className="text-muted-foreground">{selectedFile ? t('chattingWith', {fileName: selectedFile.name}) : t('description')}</p>
       </div>
 
-      <div className="flex flex-col md:grid md:grid-cols-3 gap-6 flex-grow min-h-0"> {/* Changed: Main layout container */}
-        {/* File List Section */}
+      <div className="flex flex-col md:grid md:grid-cols-3 gap-6 flex-grow min-h-0">
         <div className="md:col-span-1 flex-shrink-0 md:h-full">
-          <Card className="shadow-md flex flex-col md:sticky md:top-24 h-auto max-h-[40vh] md:h-full md:max-h-none"> {/* Changed: Card styling for responsiveness */}
+          <Card className="shadow-md flex flex-col md:sticky md:top-24 h-auto max-h-[40vh] md:h-full md:max-h-none">
             <CardHeader>
               <CardTitle>{t('selectFileTitle')}</CardTitle>
               <CardDescription>{t('selectFileDescription')}</CardDescription>
@@ -157,9 +162,8 @@ export default function RagPage() {
           </Card>
         </div>
 
-        {/* Chat Interface Section */}
-        <div className="md:col-span-2 flex flex-col flex-grow min-h-0"> {/* Changed: Chat section wrapper */}
-          <Card className="shadow-lg flex-grow flex flex-col h-full"> {/* h-full helps ensure it fills the parent on desktop when parent is grid cell */}
+        <div className="md:col-span-2 flex flex-col flex-grow min-h-0">
+          <Card className="shadow-lg flex-grow flex flex-col h-full">
             <CardHeader>
               <CardTitle>
                 {selectedFile ? t('chatWithFile', {fileName: selectedFile.name}) : t('chatInterfaceTitle')}
@@ -207,7 +211,7 @@ export default function RagPage() {
                         ) : (
                           <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
                         )}
-                        {msg.timestamp && !msg.isLoading && <p className="text-xs mt-1 opacity-70">{msg.timestamp}</p>}
+                        {msg.timestamp && !msg.isLoading && <p className="text-xs mt-1 opacity-70">{msg.name === "Gnosis.AI" ? msg.timestamp : ""}</p>}
                       </div>
                     </div>
                   </div>
@@ -252,7 +256,7 @@ export default function RagPage() {
                 </Button>
               </form>
               <div className="text-xs text-muted-foreground text-center mt-2 w-full">
-                {commonT('modelLabel', { modelName: "GPT 4.1"})} <BrainCircuit size={12} className="inline-block ml-1"/>
+                <ModelSelector selectedModelId={selectedModelId} onModelChange={setSelectedModelId} />
               </div>
             </CardFooter>
           </Card>
@@ -261,4 +265,3 @@ export default function RagPage() {
     </div>
   );
 }
-

@@ -9,11 +9,13 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type {ModelReference} from 'genkit/model';
 
 const RagBasedQueryInputSchema = z.object({
   query: z.string().describe('The question to ask about the documents.'),
   documentContent: z.string().describe('The content of the document to query.'),
   outputFormat: z.enum(['bullets', 'paragraphs']).describe('The desired output format.'),
+  modelId: z.string().optional().describe('The ID of the LLM model to use for the query.'),
 });
 export type RagBasedQueryInput = z.infer<typeof RagBasedQueryInputSchema>;
 
@@ -26,21 +28,22 @@ export async function ragBasedQuery(input: RagBasedQueryInput): Promise<RagBased
   return ragBasedQueryFlow(input);
 }
 
+const systemPrompt = `You are an AI assistant that answers questions based on the content of a document.
+
+The user will provide a question and the content of the document. You should use the document content to answer the question.
+
+The user will also specify the desired output format (bullets or paragraphs). Please format your answer accordingly.`;
+
 const prompt = ai.definePrompt({
   name: 'ragBasedQueryPrompt',
+  system: systemPrompt,
   input: {schema: RagBasedQueryInputSchema},
   output: {schema: RagBasedQueryOutputSchema},
-  prompt: `You are an AI assistant that answers questions based on the content of a document.
+  prompt: `Question: {{{query}}}
+Document Content: {{{documentContent}}}
+Output Format: {{{outputFormat}}}
 
-  The user will provide a question and the content of the document. You should use the document content to answer the question.
-
-  The user will also specify the desired output format (bullets or paragraphs). Please format your answer accordingly.
-
-  Question: {{{query}}}
-  Document Content: {{{documentContent}}}
-  Output Format: {{{outputFormat}}}
-
-  Answer:`,
+Answer:`,
 });
 
 const ragBasedQueryFlow = ai.defineFlow(
@@ -49,8 +52,23 @@ const ragBasedQueryFlow = ai.defineFlow(
     inputSchema: RagBasedQueryInputSchema,
     outputSchema: RagBasedQueryOutputSchema,
   },
-  async input => {
-    const {output} = await prompt(input);
+  async (input) => {
+    let modelToUse: ModelReference<any> | undefined = undefined;
+    if (input.modelId) {
+      try {
+        // Attempt to get the specific model generator
+        // Ensure the modelId is a valid Genkit model identifier string (e.g., "googleai/gemini-1.5-pro-latest")
+        modelToUse = ai.getGenerator(input.modelId as any) as ModelReference<any>;
+      } catch (error) {
+        console.warn(`Could not find model generator for ID: ${input.modelId}. Falling back to default.`);
+        // Fallback to default model configured in ai.ts if specific model not found or id is incorrect
+        // The default model is implicitly used if `modelToUse` remains undefined and prompt is called.
+        // Or, explicitly set the default: modelToUse = ai.getGenerator('googleai/gemini-2.0-flash'); 
+      }
+    }
+
+    // If modelToUse is still undefined, Genkit will use the default model specified in ai.ts or the prompt's config
+    const {output} = await prompt(input, { model: modelToUse });
     return output!;
   }
 );
