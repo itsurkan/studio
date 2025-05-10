@@ -153,9 +153,16 @@
     "loginSuccessfulTitle": "Вхід Успішний",
     "loginSuccessfulDescription": "З поверненням!",
     "loginFailedTitle": "Помилка Входу",
+    "loginFailedDescription": "Не вдалося увійти.",
     "loggedOutTitle": "Вихід Успішний",
     "loggedOutDescription": "Ви успішно вийшли з системи.",
-    "logoutFailedTitle": "Помилка Виходу"
+    "logoutFailedTitle": "Помилка Виходу",
+    "logoutFailedDescription": "Не вдалося вийти.",
+    "redirectFailedTitle": "Помилка Перенаправлення Входу",
+    "redirectFailedDescription": "Не вдалося завершити вхід після перенаправлення",
+    "redirectAccountExistsError": "Обліковий запис вже існує з іншими даними (наприклад, паролем або іншим соціальним провайдером). Будь ласка, увійдіть, використовуючи цей метод.",
+    "redirectCancelledError": "Процес входу було скасовано.",
+    "redirectOperationNotAllowedError": "Цей метод входу не увімкнено для цього проекту Firebase. Будь ласка, зверніться до служби підтримки."
   },
   "LandingRedirectPage": {
     "loading": "Завантаження Gnosis.AI..."

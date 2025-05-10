@@ -153,9 +153,16 @@
     "loginSuccessfulTitle": "Inicio de Sesión Exitoso",
     "loginSuccessfulDescription": "¡Bienvenido de nuevo!",
     "loginFailedTitle": "Fallo en el Inicio de Sesión",
+    "loginFailedDescription": "No se pudo iniciar sesión.",
     "loggedOutTitle": "Sesión Cerrada",
     "loggedOutDescription": "Has cerrado sesión exitosamente.",
-    "logoutFailedTitle": "Fallo al Cerrar Sesión"
+    "logoutFailedTitle": "Fallo al Cerrar Sesión",
+    "logoutFailedDescription": "No se pudo cerrar sesión.",
+    "redirectFailedTitle": "Fallo en Redirección de Inicio de Sesión",
+    "redirectFailedDescription": "No se pudo completar el inicio de sesión después de la redirección",
+    "redirectAccountExistsError": "Ya existe una cuenta con una credencial diferente (por ejemplo, contraseña o proveedor social diferente). Por favor, inicia sesión utilizando ese método.",
+    "redirectCancelledError": "El proceso de inicio de sesión fue cancelado.",
+    "redirectOperationNotAllowedError": "Este método de inicio de sesión no está habilitado para este proyecto de Firebase. Por favor, contacta con el soporte."
   },
   "LandingRedirectPage": {
     "loading": "Cargando Gnosis.AI..."

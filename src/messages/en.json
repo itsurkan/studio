@@ -153,9 +153,16 @@
     "loginSuccessfulTitle": "Login Successful",
     "loginSuccessfulDescription": "Welcome back!",
     "loginFailedTitle": "Login Failed",
+    "loginFailedDescription": "Failed to sign in.",
     "loggedOutTitle": "Logged Out",
     "loggedOutDescription": "You have been successfully logged out.",
-    "logoutFailedTitle": "Logout Failed"
+    "logoutFailedTitle": "Logout Failed",
+    "logoutFailedDescription": "Failed to sign out.",
+    "redirectFailedTitle": "Login Redirect Failed",
+    "redirectFailedDescription": "Could not complete login after redirect",
+    "redirectAccountExistsError": "An account already exists with a different credential (e.g., password or different social provider). Please sign in using that method.",
+    "redirectCancelledError": "The sign-in process was cancelled.",
+    "redirectOperationNotAllowedError": "This sign-in method is not enabled for this Firebase project. Please contact support."
   },
   "LandingRedirectPage": {
     "loading": "Loading Gnosis.AI..."
