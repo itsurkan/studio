@@ -51,7 +51,7 @@ export default function RagPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null); // Ref for the end of the chat list
   
-  const [isRecording, setIsRecording] = useState(isRecording);
+  const [isRecording, setIsRecording] = useState(false);
   const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
   const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null);
   const locale = useLocale();
@@ -471,3 +471,4 @@ export default function RagPage() {
     </div>
   );
 }
+
