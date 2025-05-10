@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useTranslations, useLocale } from "next-intl";
 import { cn } from "@/lib/utils";
 import { ModelSelector, defaultModelId } from "@/components/model-selector";
+import type { AppFile } from "@/lib/types";
 
 
 interface ChatMessageItem {
@@ -50,6 +51,8 @@ export default function RagPage() {
   const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
   const [hasMicPermission, setHasMicPermission] = useState<boolean | null>(null);
   const locale = useLocale();
+
+  const selectedFile: AppFile | undefined | null = selectedFileId ? allUploadedFiles.find(file => file.id === selectedFileId) : null;
 
 
   useEffect(() => {
