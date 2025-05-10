@@ -10,6 +10,7 @@ import { FileIcon } from "./file-icon";
 import { format } from 'date-fns';
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { AppFile } from "@/lib/types";
 
 
 interface FileListProps {

@@ -13,6 +13,7 @@ import type { AppFile } from "@/lib/types";
 import { useFiles } from "@/contexts/file-provider";
 import { FileIcon } from "./file-icon";
 import { useTranslations } from "next-intl";
+// import { indexDocumentFlow } from "@/ai/flows/index-document"; // Added import
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_FILES_PER_UPLOAD = 10;
@@ -28,7 +29,7 @@ interface UploadableFile {
 export function FileUploadForm() {
   const t = useTranslations('FileUploadForm');
   const [pendingFiles, setPendingFiles] = useState<UploadableFile[]>([]);
-  const { addFiles: addUploadedFilesToContext } = useFiles();
+  const { addFiles: addUploadedFilesToContext, updateFileIndexingStatus } = useFiles(); // Added updateFileIndexingStatus
   const { toast } = useToast();
   const formId = useId();
 
@@ -137,12 +138,51 @@ export function FileUploadForm() {
     }
 
     if (appFiles.length > 0) {
-      addUploadedFilesToContext(appFiles);
+      // Add files to context with initial indexingStatus
+      const filesWithInitialStatus: AppFile[] = appFiles.map(f => ({ 
+        ...f, 
+        indexingStatus: 'pending' as const 
+      }));
+      addUploadedFilesToContext(filesWithInitialStatus);
+
       toast({
         title: t('uploadSuccessful'),
-        description: t('uploadSuccessfulDescription', {count: appFiles.length}),
+        description: t('uploadSuccessfulDescription', {count: filesWithInitialStatus.length}),
         variant: "default",
         className: "bg-accent text-accent-foreground"
+      });
+
+      // Now, trigger indexing for each uploaded file
+      filesWithInitialStatus.forEach(async (file) => {
+        try {
+          updateFileIndexingStatus(file.id, 'indexing');
+          // const indexingResult = await indexDocumentFlow({ documentId: file.id, content: file.content });
+          
+          // if (indexingResult.status === 'success') {
+          //   updateFileIndexingStatus(file.id, 'indexed');
+          //   toast({ 
+          //     title: t('indexingSuccessTitle', { fileName: file.name }),
+          //     description: t('indexingSuccessDescription', {chunks: indexingResult.chunksIndexed ?? 0}), // Provide default for undefined
+          //     variant: "default",
+          //     className: "bg-accent text-accent-foreground"
+          //   });
+          // } else {
+          //   updateFileIndexingStatus(file.id, 'error', indexingResult.error);
+          //   toast({ 
+          //     title: t('indexingErrorTitle', { fileName: file.name }), 
+          //     description: indexingResult.error || t('unknownIndexingError'), 
+          //     variant: "destructive" 
+          //   });
+          // }
+        } catch (err) {
+          const errorMessage = err instanceof Error ? err.message : t('unknownIndexingError');
+          updateFileIndexingStatus(file.id, 'error', errorMessage);
+          toast({ 
+            title: t('indexingErrorTitle', { fileName: file.name }), 
+            description: errorMessage, 
+            variant: "destructive" 
+          });
+        }
       });
     }
   };

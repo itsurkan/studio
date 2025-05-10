@@ -10,6 +10,11 @@ interface FileContextType {
   addFiles: (newFiles: AppFile[]) => void;
   removeFile: (fileId: string) => void;
   clearFiles: () => void;
+  updateFileIndexingStatus: (
+    fileId: string,
+    status: AppFile['indexingStatus'],
+    error?: string
+  ) => void;
 }
 
 const FileContext = createContext<FileContextType | undefined>(undefined);
@@ -33,8 +38,21 @@ export function FileProvider({ children }: { children: React.ReactNode }) {
     setFiles([]);
   }, []);
 
+  const updateFileIndexingStatus = useCallback(
+    (fileId: string, status: AppFile['indexingStatus'], error?: string) => {
+      setFiles((prevFiles) =>
+        prevFiles.map((file) =>
+          file.id === fileId
+            ? { ...file, indexingStatus: status, indexingError: error }
+            : file
+        )
+      );
+    },
+    []
+  );
+
   return (
-    <FileContext.Provider value={{ files, addFile, addFiles, removeFile, clearFiles }}>
+    <FileContext.Provider value={{ files, addFile, addFiles, removeFile, clearFiles, updateFileIndexingStatus }}>
       {children}
     </FileContext.Provider>
   );
