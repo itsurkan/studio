@@ -121,9 +121,12 @@ export default function RagPage() {
 
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.overflowY = "hidden"; // Hide scrollbar initially
-      textareaRef.current.style.height = "auto"; // Reset height
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Set to scroll height
+      textareaRef.current.style.overflowY = "hidden"; 
+      textareaRef.current.style.height = "auto"; 
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; 
+      if (textareaRef.current.scrollHeight > parseFloat(getComputedStyle(textareaRef.current).maxHeight)) {
+        textareaRef.current.style.overflowY = "auto";
+      }
     }
   }, [query]);
 
@@ -137,12 +140,18 @@ export default function RagPage() {
   }, [chatMessages, scrollToBottom]);
 
   useEffect(() => {
+    // Only reset messages if the file selection *actually* changes to a different file or no file
+    // This prevents clearing chat when the file content might update but ID remains same.
     setChatMessages([]);
     setError(null);
     setQuery(""); 
+    initialQueryForSessionRef.current = ""; // Also reset this to avoid carrying over old speech prefixes
   }, [selectedFileId]);
 
   const handleSendMessage = async () => {
+    if (isRecording) { 
+        stopRecording(); 
+    }
     if (!query.trim()) {
       return;
     }
@@ -155,7 +164,7 @@ export default function RagPage() {
       name: user?.displayName || commonT('you'),
     };
     
-    const currentQuery = query;
+    const currentQuery = query; // Capture query before clearing
     setQuery(""); 
     initialQueryForSessionRef.current = ""; 
     
@@ -216,12 +225,13 @@ export default function RagPage() {
 
   const stopRecording = () => {
     if (speechRecognitionRef.current) {
-      speechRecognitionRef.current.stop();
+      speechRecognitionRef.current.stop(); // This will trigger 'onend'
     }
     if (speechPauseTimerRef.current) {
       clearTimeout(speechPauseTimerRef.current);
       speechPauseTimerRef.current = null;
     }
+    // isRecording state is set to false in recognition.onend
   };
 
   const handleToggleRecording = () => {
@@ -248,15 +258,13 @@ export default function RagPage() {
     if (isRecording) {
       stopRecording();
     } else {
-      let currentQueryValue = query;
-      if (currentQueryValue.trim() && !currentQueryValue.endsWith('\n') && !currentQueryValue.endsWith(' ')) {
-        initialQueryForSessionRef.current = currentQueryValue + '\n';
-      } else if (currentQueryValue.trim() === '') {
-        initialQueryForSessionRef.current = '';
-      } else { 
-        initialQueryForSessionRef.current = currentQueryValue;
+      // Prepare the base text for this new speech session
+      let baseTextForNewSession = query;
+      if (query.trim().length > 0 && !query.endsWith('\n')) {
+        baseTextForNewSession = query + '\n';
       }
-      setQuery(initialQueryForSessionRef.current); 
+      initialQueryForSessionRef.current = baseTextForNewSession;
+      setQuery(baseTextForNewSession); // Update the textarea to show this base
 
       const recognition = new SpeechRecognitionAPI();
       speechRecognitionRef.current = recognition;
@@ -279,32 +287,25 @@ export default function RagPage() {
           clearTimeout(speechPauseTimerRef.current);
         }
 
-        let sessionTranscript = "";
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          if (event.results[i].isFinal) {
-            sessionTranscript += event.results[i][0].transcript;
-          } else {
-            sessionTranscript += event.results[i][0].transcript;
-          }
+        // Reconstruct the full transcript from the beginning of this recognition session
+        let fullTranscriptForCurrentSession = "";
+        for (let i = 0; i < event.results.length; i++) {
+          fullTranscriptForCurrentSession += event.results[i][0].transcript;
         }
         
-        setQuery(prevQuery => {
-            if (prevQuery.startsWith(initialQueryForSessionRef.current)) {
-                 return initialQueryForSessionRef.current + sessionTranscript;
-            }
-            return prevQuery + sessionTranscript;
-        });
+        // Append the full transcript of the current session to the initial base text
+        setQuery(initialQueryForSessionRef.current + fullTranscriptForCurrentSession);
 
-
+        // Reset the pause timer
         speechPauseTimerRef.current = setTimeout(() => {
           stopRecording();
         }, SPEECH_PAUSE_TIMEOUT);
-        
       };
 
       recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
         console.error("Speech recognition error", event.error);
         toast({ title: t('speechRecognitionErrorTitle'), description: event.error, variant: "destructive" });
+        setIsRecording(false); // Ensure recording state is reset on error
       };
 
       recognition.onend = () => {
@@ -313,7 +314,7 @@ export default function RagPage() {
           clearTimeout(speechPauseTimerRef.current);
           speechPauseTimerRef.current = null;
         }
-        if (textareaRef.current) { // Ensure focus to allow typing after voice input
+        if (textareaRef.current) { 
           textareaRef.current.focus();
         }
       };
@@ -439,7 +440,7 @@ export default function RagPage() {
                     }
                   }}
                   rows={1}
-                  className="flex-grow resize-none min-h-[40px] text-sm sm:text-base"
+                  className="flex-grow resize-none min-h-[40px] text-sm sm:text-base max-h-[150px]"
                   disabled={isLoading && !isRecording} 
                   aria-label={t('queryPlaceholder')}
                 />
