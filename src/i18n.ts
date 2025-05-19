@@ -1,22 +1,22 @@
 
-import {getRequestConfig, GetRequestConfigParams} from 'next-intl/server';
-import { headers } from 'next/headers';
- 
+import {getRequestConfig, type GetRequestConfigParams} from 'next-intl/server';
+// import { headers } from 'next/headers'; // Removed
+
 export const locales = ['en', 'es', 'ua'];
 export const defaultLocale = 'ua';
 
 export default getRequestConfig(async ({locale}: GetRequestConfigParams) => {
-  // Validate that the incoming `locale` parameter is a subset of the defined locales.
-  let activeLocale = locale;
-  if (!locales.includes(activeLocale)) {
-  }
- 
-  const userAgent = (await headers()).get('user-agent');
-  console.log('User Agent:', userAgent);
+  // The `locale` parameter is guaranteed by the `next-intl` middleware
+  // to be one of your configured `locales`.
 
-  const messages = (await import(`./messages/${activeLocale}.json`)).default;
+  // Removed User Agent logging as it uses `headers()` which is problematic here.
+  // const userAgent = (await headers()).get('user-agent');
+  // console.log('User Agent:', userAgent);
+
+  const messages = (await import(`./messages/${locale}.json`)).default;
   return {
-    messages
+    messages,
+    locale // Ensure locale is returned as per next-intl requirements
   };
 });
 
